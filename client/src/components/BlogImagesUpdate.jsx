@@ -10,7 +10,7 @@ const BlogImagesUpdate = ({ blogId, currentImages = [], onUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user); // Will be used for future features
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);

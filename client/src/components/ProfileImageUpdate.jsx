@@ -51,8 +51,18 @@ const ProfileImageUpdate = () => {
     setError('');
 
     try {
+      // Check if user is logged in
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Please login again to update your profile');
+        return;
+      }
+
       const formData = new FormData();
       formData.append('profileImage', selectedFile);
+
+      console.log('Updating profile image for user:', user._id);
+      console.log('Token exists:', !!token);
 
       const response = await apiCall(`/users/${user._id}/profile-image`, 'PATCH', formData, {
         headers: {
@@ -68,8 +78,12 @@ const ProfileImageUpdate = () => {
       setPreviewUrl(null);
       setIsEditing(false);
     } catch (err) {
-      setError('Failed to update profile image. Please try again.');
       console.error('Error updating profile image:', err);
+      if (err.message.includes('401') || err.message.includes('Unauthorized')) {
+        setError('Please login again to update your profile');
+      } else {
+        setError('Failed to update profile image. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

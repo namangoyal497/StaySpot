@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Edit, CloudUpload, Check, Close, Delete } from '@mui/icons-material';
+import { Edit, CloudUpload, Check, Close } from '@mui/icons-material';
 import { apiCall } from '../utils/api';
 
 const PropertyImagesUpdate = ({ listingId, currentImages = [], onUpdate }) => {
@@ -10,7 +10,7 @@ const PropertyImagesUpdate = ({ listingId, currentImages = [], onUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user); // Will be used for future features
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);

@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { 
-  Edit, 
   Settings, 
   Security, 
   Notifications,
@@ -12,7 +11,7 @@ import "../styles/ProfilePage.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProfileImageUpdate from "../components/ProfileImageUpdate";
-import { getImageUrl } from "../utils/api";
+// import { getImageUrl } from "../utils/api"; // Will be used for future features
 
 const ProfilePage = () => {
   const user = useSelector((state) => state.user);

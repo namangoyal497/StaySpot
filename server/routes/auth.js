@@ -12,6 +12,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 /* USER REGISTER */
 router.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
+    console.log("Registration attempt with body:", req.body);
+    console.log("Profile image file:", req.file);
+
     /* Take all information from the form */
     const { firstName, lastName, email, password } = req.body;
 
@@ -21,8 +24,15 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
     /* Upload to GridFS if file exists */
     let profileImagePath = "";
     if (profileImage) {
-      const uploadedFile = await uploadToGridFS(profileImage);
-      profileImagePath = uploadedFile.filename;
+      try {
+        const uploadedFile = await uploadToGridFS(profileImage);
+        profileImagePath = uploadedFile.filename;
+        console.log("Profile image uploaded to GridFS:", profileImagePath);
+      } catch (uploadError) {
+        console.error("Error uploading to GridFS:", uploadError);
+        // Continue without profile image if upload fails
+        profileImagePath = "";
+      }
     }
 
     /* Check if user exists */
@@ -46,13 +56,14 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
 
     /* Save the new User */
     await newUser.save();
+    console.log("User registered successfully:", newUser._id);
 
     /* Send a successful message */
     res
       .status(200)
       .json({ message: "User registered successfully!", user: newUser });
   } catch (err) {
-    console.log(err);
+    console.error("Registration error:", err);
     res
       .status(500)
       .json({ message: "Registration failed!", error: err.message });
