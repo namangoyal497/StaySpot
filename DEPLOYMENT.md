@@ -4,7 +4,7 @@
 This guide will help you deploy StaySpot (Vacation Rental Platform) to Render.com with a single URL for both frontend and backend.
 
 ## 🔗 Repository Information
-- **GitHub Repository:** `https://github.com/namangoyal497/livehere.git`
+- **GitHub Repository:** `https://github.com/namangoyal497/StaySpot.git`
 - **Project Name:** StaySpot
 - **Deployment Type:** Full-stack (React + Node.js)
 
@@ -14,7 +14,7 @@ This guide will help you deploy StaySpot (Vacation Rental Platform) to Render.co
 1. Go to [Render.com](https://render.com) and sign in
 2. Click **"New +"** → **"Web Service"**
 3. Connect your GitHub account if not already connected
-4. Select the repository: `namangoyal497/livehere`
+4. Select the repository: `namangoyal497/StaySpot`
 
 ### Step 2: Configure Service Settings
 
