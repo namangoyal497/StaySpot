@@ -1,0 +1,146 @@
+.property-management {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #f0f0f0;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #e0e0e0;
+      }
+    }
+
+    h1 {
+      color: #333;
+      margin: 0;
+    }
+  }
+
+  .error-message {
+    color: #ff385c;
+    background: #fff5f5;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .property-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .property-info {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+
+      h2 {
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      .location {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 0.5rem;
+      }
+
+      .price {
+        color: #ff385c;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .details {
+        color: #666;
+        font-size: 14px;
+      }
+    }
+
+    .property-images {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+
+      h3 {
+        color: #333;
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .property-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+
+      .edit-btn {
+        background: #00a699;
+        color: white;
+
+        &:hover {
+          background: #008489;
+        }
+      }
+
+      .delete-btn {
+        background: #ff385c;
+        color: white;
+
+        &:hover {
+          background: #e31c5f;
+        }
+      }
+    }
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 18px;
+    color: #666;
+  }
+
+  .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 18px;
+    color: #ff385c;
+  }
+} 
