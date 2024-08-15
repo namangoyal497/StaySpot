@@ -2,6 +2,8 @@
 
 A modern, full-stack vacation rental platform built with React, Node.js, and MongoDB. Features include user authentication, property listings, booking system, and a blog platform.
 
+**🌐 Live Demo:** [https://stayspot-tnd0.onrender.com](https://stayspot-tnd0.onrender.com)
+
 ![StaySpot](https://img.shields.io/badge/StaySpot-Vacation%20Rental-blue)
 ![React](https://img.shields.io/badge/React-18.0.0-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-16.0.0-green)
