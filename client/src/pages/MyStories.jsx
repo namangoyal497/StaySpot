@@ -12,6 +12,7 @@ import {
 import "../styles/MyStories.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiCall } from "../utils/api";
 
 const MyStories = () => {
   const [blogs, setBlogs] = useState([]);
@@ -33,13 +34,7 @@ const MyStories = () => {
       setLoading(true);
       setError("");
       
-      const response = await fetch(`http://127.0.0.1:3001/blog/user/${userId}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
+      const data = await apiCall(`/blog/user/${userId}`);
       setBlogs(data);
     } catch (error) {
       console.error("Error fetching my stories:", error);
@@ -51,22 +46,12 @@ const MyStories = () => {
 
   const handleLike = async (blogId) => {
     try {
-      const response = await fetch(`http://127.0.0.1:3001/blog/${blogId}/like`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: user._id }),
-      });
-
-      if (response.ok) {
-        const updatedBlog = await response.json();
-        setBlogs(blogs.map(blog => 
-          blog._id === blogId 
-            ? { ...blog, likes: updatedBlog.likes }
-            : blog
-        ));
-      }
+      const updatedBlog = await apiCall(`/blog/${blogId}/like`, "PATCH", { userId: user._id });
+      setBlogs(blogs.map(blog => 
+        blog._id === blogId 
+          ? { ...blog, likes: updatedBlog.likes }
+          : blog
+      ));
     } catch (error) {
       console.error("Error liking blog:", error);
     }
@@ -79,15 +64,8 @@ const MyStories = () => {
   const handleDelete = async (blogId) => {
     if (window.confirm("Are you sure you want to delete this story?")) {
       try {
-        const response = await fetch(`http://127.0.0.1:3001/blog/${blogId}`, {
-          method: "DELETE",
-        });
-
-        if (response.ok) {
-          setBlogs(blogs.filter(blog => blog._id !== blogId));
-        } else {
-          alert("Failed to delete story");
-        }
+        await apiCall(`/blog/${blogId}`, "DELETE");
+        setBlogs(blogs.filter(blog => blog._id !== blogId));
       } catch (error) {
         console.error("Error deleting blog:", error);
         alert("Failed to delete story");

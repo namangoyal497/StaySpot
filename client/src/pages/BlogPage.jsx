@@ -14,6 +14,7 @@ import {
 import "../styles/BlogPage.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiCall } from "../utils/api";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -53,13 +54,7 @@ const BlogPage = () => {
         ...(search && { search }),
       });
 
-      const response = await fetch(`http://127.0.0.1:3001/blog?${params}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
+      const data = await apiCall(`/blog?${params}`);
       setBlogs(data);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -80,23 +75,13 @@ const BlogPage = () => {
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:3001/blog/${blogId}/like`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: user._id }),
-      });
-
-      if (response.ok) {
-        const updatedBlog = await response.json();
-        // Update the blog in the list
-        setBlogs(blogs.map(blog => 
-          blog._id === blogId 
-            ? { ...blog, likes: updatedBlog.likes }
-            : blog
-        ));
-      }
+      const updatedBlog = await apiCall(`/blog/${blogId}/like`, "PATCH", { userId: user._id });
+      // Update the blog in the list
+      setBlogs(blogs.map(blog => 
+        blog._id === blogId 
+          ? { ...blog, likes: updatedBlog.likes }
+          : blog
+      ));
     } catch (error) {
       console.error("Error liking blog:", error);
     }
@@ -112,26 +97,16 @@ const BlogPage = () => {
     if (!commentContent || commentContent.trim() === "") return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:3001/blog/${blogId}/comment`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          userId: user._id,
-          content: commentContent.trim()
-        }),
+      const updatedBlog = await apiCall(`/blog/${blogId}/comment`, "POST", { 
+        userId: user._id,
+        content: commentContent.trim()
       });
-
-      if (response.ok) {
-        const updatedBlog = await response.json();
-        // Update the blog in the list
-        setBlogs(blogs.map(blog => 
-          blog._id === blogId 
-            ? { ...blog, comments: updatedBlog.comments }
-            : blog
-        ));
-      }
+      // Update the blog in the list
+      setBlogs(blogs.map(blog => 
+        blog._id === blogId 
+          ? { ...blog, comments: updatedBlog.comments }
+          : blog
+      ));
     } catch (error) {
       console.error("Error commenting on blog:", error);
     }
