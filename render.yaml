@@ -3,7 +3,7 @@ services:
     name: stayspot-app
     env: node
     plan: free
-    buildCommand: chmod +x build.sh && ./build.sh
+    buildCommand: cd server && npm install && cd ../client && npm install && GENERATE_SOURCEMAP=false NODE_OPTIONS=--max-old-space-size=12288 npm run build
     startCommand: cd server && npm start
     envVars:
       - key: NODE_ENV
@@ -13,4 +13,8 @@ services:
       - key: PORT
         value: 10000
       - key: MONGO_URL
-        sync: false 
+        sync: false
+      - key: GENERATE_SOURCEMAP
+        value: false
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=12288 
