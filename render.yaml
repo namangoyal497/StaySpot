@@ -1,26 +1,16 @@
 services:
-  # Backend API
   - type: web
-    name: stayspot-backend
+    name: stayspot-app
     env: node
-    buildCommand: cd server && npm install
+    plan: free
+    buildCommand: cd server && npm install && cd ../client && npm install && npm run build
     startCommand: cd server && npm start
     envVars:
       - key: NODE_ENV
         value: production
+      - key: REACT_APP_API_URL
+        value: https://stayspot-app.onrender.com
       - key: PORT
         value: 10000
       - key: MONGO_URL
-        sync: false
-      - key: JWT_SECRET
-        sync: false
-
-  # Frontend
-  - type: web
-    name: stayspot-frontend
-    env: static
-    buildCommand: cd client && npm install && npm run build
-    staticPublishPath: ./client/build
-    envVars:
-      - key: REACT_APP_API_URL
-        value: https://stayspot-backend.onrender.com 
+        sync: false 
