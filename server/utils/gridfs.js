@@ -20,30 +20,37 @@ const uploadToGridFS = (file) => {
       }
     });
 
-    writeStream.on('error', reject);
-    writeStream.on('close', (file) => {
-      resolve(file._id);
+    writeStream.on('error', (error) => {
+      reject(error);
     });
 
-    writeStream.write(file.buffer);
-    writeStream.end();
+    writeStream.on('close', (file) => {
+      resolve(file);
+    });
+
+    writeStream.end(file.buffer);
   });
 };
 
-// Get file from GridFS
-const getFileFromGridFS = (fileId) => {
-  return gfs.createReadStream({ _id: fileId });
+// Get file from GridFS by filename
+const getFileByFilename = (filename) => {
+  return gfs.files.findOne({ filename });
 };
 
-// Delete file from GridFS
-const deleteFromGridFS = (fileId) => {
-  return gfs.delete({ _id: fileId });
+// Get file stream from GridFS by filename
+const getFileStream = (filename) => {
+  return gfs.createReadStream({ filename });
+};
+
+// Delete file from GridFS by filename
+const deleteFile = (filename) => {
+  return gfs.files.deleteOne({ filename });
 };
 
 module.exports = {
   initGridFS,
   uploadToGridFS,
-  getFileFromGridFS,
-  deleteFromGridFS,
-  gfs
+  getFileByFilename,
+  getFileStream,
+  deleteFile
 }; 

@@ -10,6 +10,8 @@ const listingRoutes = require("./routes/listing.js")
 const bookingRoutes = require("./routes/booking.js")
 const userRoutes = require("./routes/user.js")
 const blogRoutes = require("./routes/blog.js")
+const filesRoutes = require("./routes/files.js")
+const { initGridFS } = require("./utils/gridfs.js")
 
 app.use(cors());
 app.use(express.json());
@@ -26,6 +28,7 @@ app.use("/properties", listingRoutes)
 app.use("/bookings", bookingRoutes)
 app.use("/users", userRoutes)
 app.use("/blog", blogRoutes)
+app.use("/files", filesRoutes)
 
 // Production: Handle React routing
 if (process.env.NODE_ENV === "production") {
@@ -44,6 +47,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
+    // Initialize GridFS after MongoDB connection
+    initGridFS();
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })
   .catch((err) => console.log(`${err} did not connect`));

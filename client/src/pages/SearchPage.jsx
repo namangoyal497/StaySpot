@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import Loader from "../components/Loader"
 import Navbar from "../components/Navbar";
 import ListingCard from "../components/ListingCard";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
+import { apiCall } from "../utils/api";
 
 const SearchPage = () => {
   const [loading, setLoading] = useState(true)
@@ -17,11 +18,7 @@ const SearchPage = () => {
 
   const getSearchListings = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:3001/properties/search/${search}`, {
-        method: "GET"
-      })
-
-      const data = await response.json()
+      const data = await apiCall(`/properties/search/${search}`);
       dispatch(setListings({ listings: data }))
       setLoading(false)
     } catch (err) {

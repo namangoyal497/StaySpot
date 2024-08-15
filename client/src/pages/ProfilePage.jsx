@@ -11,6 +11,8 @@ import {
 import "../styles/ProfilePage.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ProfileImageUpdate from "../components/ProfileImageUpdate";
+import { getImageUrl } from "../utils/api";
 
 const ProfilePage = () => {
   const user = useSelector((state) => state.user);
@@ -48,15 +50,9 @@ const ProfilePage = () => {
         <div className="profile-content">
           <div className="profile-section">
             <div className="profile-info">
-              <div className="profile-image">
-                <img
-                  src={`http://127.0.0.1:3001/${user.profileImagePath?.replace("public", "") || "uploads/default-profile.jpg"}`}
-                  alt="Profile"
-                />
-                <button className="edit-image-btn">
-                  <Edit />
-                </button>
-              </div>
+                          <div className="profile-image">
+              <ProfileImageUpdate />
+            </div>
               
               <div className="profile-details">
                 <h2>{user.firstName} {user.lastName}</h2>

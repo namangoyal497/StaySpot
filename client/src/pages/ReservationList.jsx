@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setReservationList } from "../redux/state";
 import ListingCard from "../components/ListingCard";
 import HostActions from "../components/HostActions";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
+import { apiCall } from "../utils/api";
 
 const ReservationList = () => {
   const [loading, setLoading] = useState(true);
@@ -17,23 +18,9 @@ const ReservationList = () => {
 
   const handleStatusUpdate = async (bookingId, newStatus) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:3001/bookings/${bookingId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
-
-      if (response.ok) {
-        // Refresh the reservation list
-        getReservationList();
-      } else {
-        console.log("Failed to update booking status");
-      }
+      await apiCall(`/bookings/${bookingId}`, "PATCH", { status: newStatus });
+      // Refresh the reservation list
+      getReservationList();
     } catch (err) {
       console.log("Update booking status failed!", err.message);
     }
@@ -41,14 +28,7 @@ const ReservationList = () => {
 
   const getReservationList = useCallback(async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:3001/users/${userId}/reservations`,
-        {
-          method: "GET",
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiCall(`/users/${userId}/reservations`);
       dispatch(setReservationList(data));
       setLoading(false);
     } catch (err) {

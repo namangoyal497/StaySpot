@@ -4,18 +4,10 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 
 const User = require("../models/User");
+const { uploadToGridFS } = require("../utils/gridfs");
 
-/* Configuration Multer for File Upload */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads/"); // Store uploaded files in the 'uploads' folder
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname); // Use the original file name
-  },
-});
-
-const upload = multer({ storage });
+/* Configuration Multer for Memory Storage */
+const upload = multer({ storage: multer.memoryStorage() });
 
 /* USER REGISTER */
 router.post("/register", upload.single("profileImage"), async (req, res) => {
@@ -26,8 +18,12 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
     /* The uploaded file is available as req.file */
     const profileImage = req.file;
 
-    /* path to the uploaded profile photo */
-    const profileImagePath = profileImage ? profileImage.path : "";
+    /* Upload to GridFS if file exists */
+    let profileImagePath = "";
+    if (profileImage) {
+      const uploadedFile = await uploadToGridFS(profileImage);
+      profileImagePath = uploadedFile.filename;
+    }
 
     /* Check if user exists */
     const existingUser = await User.findOne({ email });

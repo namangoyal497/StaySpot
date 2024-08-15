@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { apiCall } from "../utils/api";
 // import "../styles/ForgotPassword.scss";
 
 const ForgotPasswordPage = () => {
@@ -9,21 +10,8 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:3001/auth/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage("Password reset link sent to your email");
-      } else {
-        setMessage(data.message || "Failed to send password reset link");
-      }
+      await apiCall("/auth/forgot-password", "POST", { email });
+      setMessage("Password reset link sent to your email");
     } catch (err) {
       console.log("Failed to send password reset link", err.message);
       setMessage("Failed to send password reset link. Please try again later.");

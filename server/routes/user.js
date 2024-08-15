@@ -1,8 +1,13 @@
 const router = require("express").Router()
 const { auth, authorizeUser } = require("../middleware/auth")
+const multer = require("multer");
+const User = require("../models/User");
+const { uploadToGridFS, deleteFile } = require("../utils/gridfs");
+
+// Multer configuration for memory storage
+const upload = multer({ storage: multer.memoryStorage() });
 
 const Booking = require("../models/Booking")
-const User = require("../models/User")
 const Listing = require("../models/Listing")
 
 /* GET TRIP LIST */
@@ -84,6 +89,57 @@ router.get("/:userId/reservations", auth, authorizeUser(), async (req, res) => {
     res.status(404).json({ message: "Can not find reservations!", error: err.message })
   }
 })
+
+/* UPDATE USER PROFILE IMAGE */
+router.patch("/:userId/profile-image", auth, upload.single("profileImage"), async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    // Check if user is updating their own profile
+    if (req.user._id.toString() !== userId) {
+      return res.status(403).json({ message: "You can only update your own profile" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Delete old profile image if exists
+    if (user.profileImagePath) {
+      try {
+        await deleteFile(user.profileImagePath);
+      } catch (error) {
+        console.log("Error deleting old profile image:", error);
+      }
+    }
+
+    // Upload new profile image
+    let newProfileImagePath = "";
+    if (req.file) {
+      const uploadedFile = await uploadToGridFS(req.file);
+      newProfileImagePath = uploadedFile.filename;
+    }
+
+    // Update user profile image
+    user.profileImagePath = newProfileImagePath;
+    await user.save();
+
+    res.status(200).json({ 
+      message: "Profile image updated successfully", 
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        profileImagePath: user.profileImagePath
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to update profile image", error: err.message });
+  }
+});
 
 
 module.exports = router

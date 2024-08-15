@@ -16,6 +16,8 @@ import CreateBlog from "./pages/CreateBlog";
 import BlogDetail from "./pages/BlogDetail";
 import MyStories from "./pages/MyStories";
 import ProfilePage from "./pages/ProfilePage";
+import PropertyManagement from "./pages/PropertyManagement";
+import BlogManagement from "./pages/BlogManagement";
 // import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 // import ResetPasswordPage from "./pages/ResetPasswordPage"
 
@@ -42,6 +44,8 @@ function App() {
           <Route path="/blog/user/:userId" element={<MyStories />} />
           <Route path="/blog/edit/:blogId" element={<CreateBlog />} />
           <Route path="/blog/:blogId" element={<BlogDetail />} />
+          <Route path="/blog/manage/:blogId" element={<BlogManagement />} />
+          <Route path="/properties/manage/:listingId" element={<PropertyManagement />} />
           <Route path="/:userId/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>

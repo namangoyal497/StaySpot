@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { apiCall } from "../utils/api";
 // import "../styles/ResetPassword.scss";
 
 const ResetPasswordPage = () => {
@@ -18,22 +19,10 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:3001/auth/reset-password/${token}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-      });
+      const data = await apiCall(`/auth/reset-password/${token}`, "POST", { password });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage("Password reset successfully");
-        navigate("/login");
-      } else {
-        setMessage(data.message || "Failed to reset password");
-      }
+      setMessage("Password reset successfully");
+      navigate("/login");
     } catch (err) {
       console.log("Failed to reset password", err.message);
       setMessage("Failed to reset password. Please try again later.");

@@ -10,7 +10,8 @@ import { useState } from "react";
 import { BiTrash } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
+import { apiCall } from "../utils/api";
 
 const CreateListing = () => {
   const [category, setCategory] = useState("");
@@ -128,14 +129,8 @@ const CreateListing = () => {
       });
 
       /* Send a POST request to server */
-      const response = await fetch("http://127.0.0.1:3001/properties/create", {
-        method: "POST",
-        body: listingForm,
-      });
-
-      if (response.ok) {
-        navigate("/");
-      }
+      await apiCall("/properties/create", "POST", listingForm);
+      navigate("/");
     } catch (err) {
       console.log("Publish Listing failed", err.message);
     }

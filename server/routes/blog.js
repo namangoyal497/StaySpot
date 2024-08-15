@@ -4,20 +4,12 @@ const User = require("../models/User");
 const multer = require("multer");
 const path = require("path");
 const { auth, authorizeUser } = require("../middleware/auth");
+const { uploadToGridFS, deleteFile } = require("../utils/gridfs");
 
 const router = express.Router();
 
-// Multer configuration for blog images
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage: storage });
+// Multer configuration for memory storage
+const upload = multer({ storage: multer.memoryStorage() });
 
 /* CREATE BLOG POST */
 router.post("/create", auth, upload.array("blogImages"), async (req, res) => {
@@ -32,7 +24,14 @@ router.post("/create", auth, upload.array("blogImages"), async (req, res) => {
       });
     }
 
-    const imagePaths = req.files ? req.files.map(file => file.path) : [];
+    // Upload images to GridFS
+    const imagePaths = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const uploadedFile = await uploadToGridFS(file);
+        imagePaths.push(uploadedFile.filename);
+      }
+    }
     const tagArray = tags ? tags.split(',').map(tag => tag.trim()) : [];
 
     const newBlog = new Blog({
@@ -141,6 +140,63 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
+/* UPDATE BLOG IMAGES */
+router.patch("/:id/images", auth, upload.array("blogImages"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      return res.status(404).json({ message: "Blog post not found!" });
+    }
+
+    // Check if user is the author of the blog
+    if (blog.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "You can only update your own blog posts" });
+    }
+
+    // Delete old images if they exist
+    if (blog.images && blog.images.length > 0) {
+      for (const oldImagePath of blog.images) {
+        try {
+          await deleteFile(oldImagePath);
+        } catch (error) {
+          console.log("Error deleting old blog image:", error);
+        }
+      }
+    }
+
+    // Upload new images
+    const newImagePaths = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const uploadedFile = await uploadToGridFS(file);
+        newImagePaths.push(uploadedFile.filename);
+      }
+    }
+
+    // Update blog with new images
+    blog.images = newImagePaths;
+    await blog.save();
+
+    // Populate author info
+    await blog.populate("author", "firstName lastName profileImagePath");
+
+    res.status(200).json({ 
+      message: "Blog images updated successfully", 
+      blog: {
+        _id: blog._id,
+        title: blog.title,
+        images: blog.images,
+        author: blog.author
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to update blog images", error: err.message });
+  }
+});
+
 /* UPDATE BLOG POST */
 router.put("/:id", upload.array("blogImages"), async (req, res) => {
   try {
@@ -157,7 +213,11 @@ router.put("/:id", upload.array("blogImages"), async (req, res) => {
     
     // Handle new images if uploaded
     if (req.files && req.files.length > 0) {
-      const imagePaths = req.files.map(file => file.path);
+      const imagePaths = [];
+      for (const file of req.files) {
+        const uploadedFile = await uploadToGridFS(file);
+        imagePaths.push(uploadedFile.filename);
+      }
       updateData.images = imagePaths;
     }
     

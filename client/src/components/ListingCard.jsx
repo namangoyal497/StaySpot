@@ -8,7 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setWishList } from "../redux/state";
-import { apiCall } from "../utils/api";
+import { apiCall, getImageUrl } from "../utils/api";
 
 const ListingCard = ({
   listingId,
@@ -121,7 +121,7 @@ const ListingCard = ({
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {listingPhotoPaths?.map((photo, index) => {
-            const imageUrl = `http://127.0.0.1:3001/${photo?.replace("public\\", "").replace("public/", "").replace(/\\/g, "/")}`;
+            const imageUrl = getImageUrl(photo);
             return (
               <div key={index} className="listing-slide">
                 <img

@@ -12,7 +12,7 @@ import {
 import "../styles/BlogDetail.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { apiCall } from "../utils/api";
+import { apiCall, getImageUrl } from "../utils/api";
 
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
@@ -127,7 +127,7 @@ const BlogDetail = () => {
             <div className="blog-meta">
               <div className="author">
                 <img 
-                  src={`http://127.0.0.1:3001/${blog.author?.profileImagePath?.replace("public", "") || "uploads/default-profile.jpg"}`} 
+                  src={getImageUrl(blog.author?.profileImagePath) || getImageUrl("uploads/default-profile.jpg")} 
                   alt={blog.author?.firstName || "Author"}
                 />
                 <div>
@@ -161,7 +161,7 @@ const BlogDetail = () => {
               {blog.images.map((image, index) => (
                 <img 
                   key={index}
-                  src={`http://127.0.0.1:3001/${image?.replace("public", "") || ""}`} 
+                  src={getImageUrl(image)} 
                   alt={`${index + 1}`}
                 />
               ))}
@@ -210,7 +210,7 @@ const BlogDetail = () => {
                   <div key={index} className="comment">
                     <div className="comment-author">
                       <img 
-                        src={`http://127.0.0.1:3001/${comment.user?.profileImagePath?.replace("public", "") || "uploads/default-profile.jpg"}`} 
+                        src={getImageUrl(comment.user?.profileImagePath) || getImageUrl("uploads/default-profile.jpg")} 
                         alt={comment.user?.firstName || "User"}
                       />
                       <div>

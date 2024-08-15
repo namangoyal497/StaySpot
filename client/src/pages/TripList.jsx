@@ -5,7 +5,8 @@ import Navbar from "../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { setTripList } from "../redux/state";
 import ListingCard from "../components/ListingCard";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
+import { apiCall } from "../utils/api";
 
 const TripList = () => {
   const [loading, setLoading] = useState(true);
@@ -17,14 +18,7 @@ const TripList = () => {
 
   const getTripList = useCallback(async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:3001/users/${userId}/trips`,
-        {
-          method: "GET",
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiCall(`/users/${userId}/trips`);
       dispatch(setTripList(data));
       setLoading(false);
     } catch (err) {

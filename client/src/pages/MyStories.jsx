@@ -12,7 +12,9 @@ import {
 import "../styles/MyStories.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { apiCall } from "../utils/api";
+import { apiCall, getImageUrl } from "../utils/api";
+import { useNavigate } from "react-router-dom";
+import { Settings } from "@mui/icons-material";
 
 const MyStories = () => {
   const [blogs, setBlogs] = useState([]);
@@ -59,6 +61,10 @@ const MyStories = () => {
 
   const handleEdit = (blogId) => {
     navigate(`/blog/edit/${blogId}`);
+  };
+
+  const handleManage = (blogId) => {
+    navigate(`/blog/manage/${blogId}`);
   };
 
   const handleDelete = async (blogId) => {
@@ -142,7 +148,7 @@ const MyStories = () => {
                   <div className="story-image">
                     {blog.images && blog.images.length > 0 ? (
                                               <img 
-                          src={`http://127.0.0.1:3001/${blog.images[0].replace("public", "")}`} 
+                          src={getImageUrl(blog.images[0])} 
                           alt={blog.title}
                         />
                     ) : (
@@ -150,14 +156,23 @@ const MyStories = () => {
                     )}
                     <div className="story-actions">
                       <button 
+                        className="manage-btn"
+                        onClick={() => handleManage(blog._id)}
+                        title="Manage Images"
+                      >
+                        <Settings />
+                      </button>
+                      <button 
                         className="edit-btn"
                         onClick={() => handleEdit(blog._id)}
+                        title="Edit Content"
                       >
                         <Edit />
                       </button>
                       <button 
                         className="delete-btn"
                         onClick={() => handleDelete(blog._id)}
+                        title="Delete Story"
                       >
                         <Delete />
                       </button>

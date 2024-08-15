@@ -51,9 +51,14 @@ export const userSlice = createSlice({
     },
     setReservationList: (state, action) => {
       state.user.reservationList = action.payload
+    },
+    setUser: (state, action) => {
+      state.user = action.payload
+      // Update localStorage
+      localStorage.setItem('user', JSON.stringify(action.payload));
     }
   }
 })
 
-export const { setLogin, setLogout, setListings, setTripList, setWishList, setPropertyList, setReservationList } = userSlice.actions
+export const { setLogin, setLogout, setListings, setTripList, setWishList, setPropertyList, setReservationList, setUser } = userSlice.actions
 export default userSlice.reducer

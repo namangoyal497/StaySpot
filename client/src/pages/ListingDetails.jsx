@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/ListingDetails.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { facilities } from "../data";
-import { apiCall } from "../utils/api";
+import { apiCall, getImageUrl } from "../utils/api";
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -20,14 +20,7 @@ const ListingDetails = () => {
 
   const getListingDetails = async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:3001/properties/${listingId}`,
-        {
-          method: "GET",
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiCall(`/properties/${listingId}`);
       setListing(data);
       setLoading(false);
     } catch (err) {
@@ -105,7 +98,7 @@ const ListingDetails = () => {
         <div className="photos">
           {listing.listingPhotoPaths?.map((item) => (
             <img
-              src={`http://127.0.0.1:3001/${item.replace("public", "")}`}
+              src={getImageUrl(item)}
               alt="listing"
             />
           ))}
@@ -123,10 +116,7 @@ const ListingDetails = () => {
 
         <div className="profile">
           <img
-            src={`http://127.0.0.1:3001/${listing.creator.profileImagePath.replace(
-              "public",
-              ""
-            )}`} alt=""
+            src={getImageUrl(listing.creator.profileImagePath)} alt=""
           />
           <h3>
             Hosted by {listing.creator.firstName} {listing.creator.lastName}

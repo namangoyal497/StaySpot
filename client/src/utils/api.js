@@ -64,5 +64,11 @@ export const apiCall = async (endpoint, method = 'GET', body = null, options = {
 // Helper function to get image URL
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return '';
-  return `${API_BASE_URL}/${imagePath.replace('public/', '')}`;
+  // If it's already a full URL, return as is
+  if (imagePath.startsWith('http')) {
+    return imagePath;
+  }
+  // Remove 'public/' prefix if present and serve from GridFS
+  const filename = imagePath.replace('public/', '').replace('uploads/', '');
+  return `${API_BASE_URL}/files/${filename}`;
 }; 
