@@ -25,7 +25,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     setPasswordMatch(formData.password === formData.confirmPassword || formData.confirmPassword === "")
-  })
+  }, [formData.password, formData.confirmPassword])
 
   const navigate = useNavigate()
 
@@ -39,7 +39,7 @@ const RegisterPage = () => {
         register_form.append(key, formData[key])
       }
 
-      const response = await fetch("http://127.0.0.1:3001/auth/register", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3001'}/auth/register`, {
         method: "POST",
         body: register_form
       })
@@ -114,14 +114,14 @@ const RegisterPage = () => {
             required
           />
           <label htmlFor="image">
-            <img src="/assets/addImage.png" alt="add profile photo" />
+            <img src="/assets/addImage.png" alt="add profile" />
             <p>Upload Your Photo</p>
           </label>
 
           {formData.profileImage && (
             <img
               src={URL.createObjectURL(formData.profileImage)}
-              alt="profile photo"
+              alt="profile"
               style={{ maxWidth: "80px" }}
             />
           )}

@@ -11,6 +11,11 @@ import PropertyList from "./pages/PropertyList";
 import ReservationList from "./pages/ReservationList";
 import CategoryPage from "./pages/CategoryPage";
 import SearchPage from "./pages/SearchPage";
+import BlogPage from "./pages/BlogPage";
+import CreateBlog from "./pages/CreateBlog";
+import BlogDetail from "./pages/BlogDetail";
+import MyStories from "./pages/MyStories";
+import ProfilePage from "./pages/ProfilePage";
 // import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 // import ResetPasswordPage from "./pages/ResetPasswordPage"
 
@@ -31,7 +36,13 @@ function App() {
           <Route path="/:userId/trips" element={<TripList />} />
           <Route path="/:userId/wishList" element={<WishList />} />
           <Route path="/:userId/properties" element={<PropertyList />} />
-          <Route path="/:userId/reservations" element={<ReservationList />} />  
+          <Route path="/:userId/reservations" element={<ReservationList />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/create" element={<CreateBlog />} />
+          <Route path="/blog/user/:userId" element={<MyStories />} />
+          <Route path="/blog/edit/:blogId" element={<CreateBlog />} />
+          <Route path="/blog/:blogId" element={<BlogDetail />} />
+          <Route path="/:userId/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </div>

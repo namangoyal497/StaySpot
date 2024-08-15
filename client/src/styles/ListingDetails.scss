@@ -133,6 +133,72 @@
           max-width: 300px;
         }
       }
+
+      .guest-selector {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+
+        h3 {
+          margin: 0 0 15px 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: #1a202c;
+        }
+
+        .guest-count {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          margin-bottom: 10px;
+
+          .guest-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #667eea;
+            background: white;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+
+            &:hover:not(:disabled) {
+              background: #667eea;
+              color: white;
+              transform: scale(1.1);
+            }
+
+            &:disabled {
+              border-color: #cbd5e0;
+              color: #a0aec0;
+              cursor: not-allowed;
+            }
+          }
+
+          .guest-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            min-width: 30px;
+            text-align: center;
+          }
+        }
+
+        .guest-limit {
+          margin: 0;
+          font-size: 14px;
+          color: #718096;
+          text-align: center;
+        }
+      }
     }
   }
 }

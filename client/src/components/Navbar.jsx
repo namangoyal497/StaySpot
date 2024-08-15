@@ -1,10 +1,10 @@
 import { IconButton } from "@mui/material";
-import { Search, Person, Menu } from "@mui/icons-material";
+import { Search, Person, Menu, Home } from "@mui/icons-material";
 import variables from "../styles/variables.scss";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/Navbar.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { setLogout } from "../redux/state";
 
 
@@ -18,6 +18,14 @@ const Navbar = () => {
   const [search, setSearch] = useState("")
 
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Check if we're on blog pages
+  const isOnBlogPage = location.pathname.startsWith('/blog')
+  
+
+  
+
 
   return (
     <div className="navbar">
@@ -41,15 +49,18 @@ const Navbar = () => {
       </div>
 
       <div className="navbar_right">
-        {user ? (
-          <a href="/create-listing" className="host">
-            Become A Host
-          </a>
+        {isOnBlogPage ? (
+          <Link to="/" className="host">
+            <Home sx={{ marginRight: 1 }} />
+            Back to Home
+          </Link>
         ) : (
-          <a href="/login" className="host">
-            Become A Host
-          </a>
+          <Link to="/blog" className="host">
+            Travel Blog
+          </Link>
         )}
+
+
 
         <button
           className="navbar_right_account"
@@ -64,7 +75,7 @@ const Navbar = () => {
                 "public",
                 ""
               )}`}
-              alt="profile photo"
+              alt="profile"
               style={{ objectFit: "cover", borderRadius: "50%" }}
             />
           )}
@@ -79,11 +90,14 @@ const Navbar = () => {
 
         {dropdownMenu && user && (
           <div className="navbar_right_accountmenu">
+            <Link to={`/${user._id}/profile`}>My Profile</Link>
             <Link to={`/${user._id}/trips`}>Trip List</Link>
             <Link to={`/${user._id}/wishList`}>Wish List</Link>
             <Link to={`/${user._id}/properties`}>Property List</Link>
             <Link to={`/${user._id}/reservations`}>Reservation List</Link>
-            <Link to="/create-listing">Become A Host</Link>
+            <Link to="/create-listing">List Your Property</Link>
+            <Link to="/blog/create">Write a Story</Link>
+            <Link to={`/blog/user/${user._id}`}>My Stories</Link>
 
             <Link
               to="/login"

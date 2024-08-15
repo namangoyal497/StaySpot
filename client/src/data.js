@@ -46,6 +46,7 @@ import { AiFillCar } from "react-icons/ai";
 
 export const categories = [
   {
+    img: "assets/logo.png",
     label: "All",
     icon: <BiWorld />,
   },

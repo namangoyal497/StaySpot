@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/ListingDetails.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { facilities } from "../data";
+import { apiCall } from "../utils/api";
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -58,32 +59,31 @@ const ListingDetails = () => {
   const end = new Date(dateRange[0].endDate);
   const dayCount = Math.round(end - start) / (1000 * 60 * 60 * 24); // Calculate the difference in day unit
 
+  /* GUEST COUNT SELECTOR */
+  const [selectedGuestCount, setSelectedGuestCount] = useState(1);
+
   /* SUBMIT BOOKING */
-  const customerId = useSelector((state) => state?.user?._id)
+  const userId = useSelector((state) => state?.user?._id)
 
   const navigate = useNavigate()
 
   const handleSubmit = async () => {
     try {
       const bookingForm = {
-        customerId,
         listingId,
-        hostId: listing.creator._id,
-        startDate: dateRange[0].startDate.toDateString(),
-        endDate: dateRange[0].endDate.toDateString(),
+        checkIn: dateRange[0].startDate.toDateString(),
+        checkOut: dateRange[0].endDate.toDateString(),
         totalPrice: listing.price * dayCount,
+        guestCount: selectedGuestCount,
       }
 
-      const response = await fetch("http://127.0.0.1:3001/bookings/create", {
+      const response = await apiCall("/bookings/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(bookingForm)
       })
 
       if (response.ok) {
-        navigate(`/${customerId}/trips`)
+        navigate(`/${userId}/trips`)
       }
     } catch (err) {
       console.log("Submit Booking Failed.", err.message)
@@ -177,6 +177,30 @@ const ListingDetails = () => {
               <h2>Total price: ${listing.price * dayCount}</h2>
               <p>Start Date: {dateRange[0].startDate.toDateString()}</p>
               <p>End Date: {dateRange[0].endDate.toDateString()}</p>
+
+              <div className="guest-selector">
+                <h3>Number of Guests</h3>
+                <div className="guest-count">
+                  <button 
+                    type="button"
+                    onClick={() => selectedGuestCount > 1 && setSelectedGuestCount(selectedGuestCount - 1)}
+                    disabled={selectedGuestCount <= 1}
+                    className="guest-btn"
+                  >
+                    -
+                  </button>
+                  <span className="guest-number">{selectedGuestCount}</span>
+                  <button 
+                    type="button"
+                    onClick={() => selectedGuestCount < listing.guestCount && setSelectedGuestCount(selectedGuestCount + 1)}
+                    disabled={selectedGuestCount >= listing.guestCount}
+                    className="guest-btn"
+                  >
+                    +
+                  </button>
+                </div>
+                <p className="guest-limit">Maximum {listing.guestCount} guests</p>
+              </div>
 
               <button className="button" type="submit" onClick={handleSubmit}>
                 BOOKING

@@ -2,7 +2,7 @@ import "../styles/List.scss";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import ListingCard from "../components/ListingCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { setPropertyList } from "../redux/state";
 import Loader from "../components/Loader";
 import Footer from "../components/Footer"
@@ -10,10 +10,10 @@ import Footer from "../components/Footer"
 const PropertyList = () => {
   const [loading, setLoading] = useState(true)
   const user = useSelector((state) => state.user)
-  const propertyList = user?.propertyList;
+  const propertyList = user?.propertyList || [];
  
   const dispatch = useDispatch()
-  const getPropertyList = async () => {
+  const getPropertyList = useCallback(async () => {
     try {
       const response = await fetch(`http://127.0.0.1:3001/users/${user._id}/properties`, {
         method: "GET"
@@ -25,30 +25,31 @@ const PropertyList = () => {
     } catch (err) {
       console.log("Fetch all properties failed", err.message)
     }
-  }
+  }, [user._id, dispatch])
 
   useEffect(() => {
     getPropertyList()
-  }, [])
+  }, [getPropertyList])
 
   return loading ? <Loader /> : (
     <>
       <Navbar />
       <h1 className="title-list">Your Property List</h1>
       <div className="list">
-        {propertyList?.map(
-          ({
-            _id,
-            creator,
-            listingPhotoPaths,
-            city,
-            province,
-            country,
-            category,
-            type,
-            price,
-            booking = false,
-          }) => (
+        {Array.isArray(propertyList) && propertyList.length > 0 ? (
+          propertyList.map(
+            ({
+              _id,
+              creator,
+              listingPhotoPaths,
+              city,
+              province,
+              country,
+              category,
+              type,
+              price,
+              booking = false,
+            }) => (
             <ListingCard
               listingId={_id}
               creator={creator}
@@ -61,7 +62,12 @@ const PropertyList = () => {
               price={price}
               booking={booking}
             />
-          )
+          ))
+        ) : (
+          <div className="empty-state">
+            <h2>No properties found</h2>
+            <p>You haven't listed any properties yet. Start by creating your first listing!</p>
+          </div>
         )}
       </div>
 

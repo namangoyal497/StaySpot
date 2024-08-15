@@ -1,61 +1,93 @@
-import { useEffect, useState } from "react";
-import { categories } from "../data";
+import { useEffect, useState, useCallback } from "react";
 import "../styles/Listings.scss";
 import ListingCard from "./ListingCard";
 import Loader from "./Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setListings } from "../redux/state";
+import { apiCall } from "../utils/api";
+import { categories } from "../data";
 
 const Listings = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedFilter, setSelectedFilter] = useState("All");
 
   const listings = useSelector((state) => state.listings);
 
-  const getFeedListings = async () => {
+  const getFeedListings = useCallback(async () => {
     try {
-      const response = await fetch(
-        selectedCategory !== "All"
-          ? `http://127.0.0.1:3001/properties?category=${selectedCategory}`
-          : "http://127.0.0.1:3001/properties",
-        {
-          method: "GET",
-        }
+      console.log("Listings component - selectedFilter:", selectedFilter);
+      
+      // Map frontend category labels to backend category values
+      const categoryMapping = {
+        "Beachfront": "beach",
+        "Windmills": "windmill", 
+        "Iconic cities": "modern",
+        "Countryside": "countryside",
+        "Amazing Pools": "pool",
+        "Islands": "island",
+        "Lakefront": "lake",
+        "Ski-in/out": "skiing",
+        "Castles": "castle",
+        "Caves": "cave",
+        "Camping": "camping",
+        "Arctic": "arctic",
+        "Desert": "desert",
+        "Barns": "barn",
+        "Luxury": "lux"
+      };
+
+      const backendCategory = selectedFilter !== "All" ? categoryMapping[selectedFilter] || selectedFilter : null;
+      console.log("Listings component - backendCategory:", backendCategory);
+      
+      const data = await apiCall(
+        backendCategory
+          ? `/properties?category=${backendCategory}`
+          : "/properties",
+        'GET',
+        null
       );
 
-      const data = await response.json();
+      console.log("Listings component - API response:", data);
       dispatch(setListings({ listings: data }));
       setLoading(false);
     } catch (err) {
       console.log("Fetch Listings Failed", err.message);
     }
-  };
+  }, [selectedFilter, dispatch]);
 
   useEffect(() => {
     getFeedListings();
-  }, [selectedCategory]);
+  }, [selectedFilter, getFeedListings]);
+
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+  };
 
   return (
     <>
-      <div className="category-list">
-        {categories?.map((category, index) => (
-          <div
-            className={`category ${category.label === selectedCategory ? "selected" : ""}`}
-            key={index}
-            onClick={() => setSelectedCategory(category.label)}
-          >
-            <div className="category_icon">{category.icon}</div>
-            <p>{category.label}</p>
-          </div>
-        ))}
+      {/* Filter Section */}
+      <div className="listings-filter">
+        <h2>Filter Properties</h2>
+        <div className="filter-options">
+          {categories?.map((category) => (
+            <div
+              key={category.label}
+              className={`filter-item ${selectedFilter === category.label ? 'active' : ''}`}
+              onClick={() => handleFilterChange(category.label)}
+            >
+              <div className="filter-icon">{category.icon}</div>
+              <span>{category.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
+      {/* Listings Section */}
       {loading ? (
         <Loader />
       ) : (
-        <div className="listings">
+        <div className="listings" id="listings">
           {listings.map(
             ({
               _id,
@@ -70,6 +102,7 @@ const Listings = () => {
               booking=false
             }) => (
               <ListingCard
+                key={_id}
                 listingId={_id}
                 creator={creator}
                 listingPhotoPaths={listingPhotoPaths}

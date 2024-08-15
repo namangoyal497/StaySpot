@@ -2,37 +2,64 @@
 @import "./breakpoints.scss";
 
 .navbar {
-  padding: 10px 60px;
+  padding: 15px 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  z-index: 10000;
 
   @include sm {
-    padding: 10px 20px;
+    padding: 15px 20px;
   }
 
   img {
-    width: 100px;
+    width: 120px;
     cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 
   &_search {
-    border: 1px solid $grey;
+    border: 2px solid #e2e8f0;
     border-radius: 30px;
     height: 50px;
     padding: 0px 20px;
     display: flex;
     gap: 40px;
     align-items: center;
+    background: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
     input {
       border: none;
       outline: none;
+      background: transparent;
+      font-size: 16px;
+      color: #2d3748;
+      width: 200px;
+
+      &::placeholder {
+        color: #a0aec0;
+      }
     }
 
     &:hover {
-      @include shadow;
+      border-color: #38a169;
+      box-shadow: 0 4px 20px rgba(56, 161, 105, 0.15);
+    }
+
+    &:focus-within {
+      border-color: #38a169;
+      box-shadow: 0 4px 20px rgba(56, 161, 105, 0.2);
     }
 
     @include lg {
@@ -44,15 +71,25 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    position: relative;
 
     .host {
       text-decoration: none;
-      color: $blue;
-      font-weight: 700;
+      color: white;
+      font-weight: 600;
       cursor: pointer;
+      padding: 12px 24px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
+      display: flex;
+      align-items: center;
 
       &:hover {
-        color: $pinkred;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(56, 161, 105, 0.4);
+        color: white;
       }
 
       @include sm {
@@ -60,25 +97,33 @@
       }
     }
 
+
+
     &_account {
       height: 50px;
       display: flex;
       align-items: center;
-      padding: 0 10px;
-      border: 1px solid $grey;
+      padding: 0 15px;
+      border: 2px solid #e2e8f0;
       border-radius: 30px;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       background-color: white;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
       &:hover {
-        @include shadow;
+        border-color: #38a169;
+        box-shadow: 0 4px 20px rgba(56, 161, 105, 0.15);
+        transform: translateY(-1px);
       }
 
       img {
         width: 40px;
         height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
       }
     }
 
@@ -89,27 +134,45 @@
       top: 80px;
       display: flex;
       flex-direction: column;
-      width: 200px;
-      padding: 10px 0;
-      border: 1px solid $lightgrey;
+      width: 220px;
+      padding: 15px 0;
+      border: 1px solid #e2e8f0;
       border-radius: 20px;
-      @include shadow;
-      z-index: 9999;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      z-index: 10001;
+      backdrop-filter: blur(10px);
 
       @include sm {
         right: 20px;
+        width: 200px;
       }
 
       a {
         width: 100%;
-        padding: 8px 15px;
+        padding: 12px 20px;
         text-decoration: none;
-        color: $blue;
-        font-weight: 700;
+        color: #4a5568;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        margin: 0 10px;
 
         &:hover {
-          color: $pinkred;
-          background-color: rgba(217, 213, 213, 0.2);
+          color: #38a169;
+          background-color: #f7fafc;
+          transform: translateX(5px);
+        }
+
+        &:first-child {
+          margin-top: 5px;
+        }
+
+        &:last-child {
+          margin-bottom: 5px;
+          border-top: 1px solid #e2e8f0;
+          margin-top: 10px;
+          padding-top: 15px;
+          color: #e53e3e;
         }
       }
     }

@@ -1,14 +1,15 @@
 const router = require("express").Router()
+const { auth, authorizeUser } = require("../middleware/auth")
 
 const Booking = require("../models/Booking")
 const User = require("../models/User")
 const Listing = require("../models/Listing")
 
 /* GET TRIP LIST */
-router.get("/:userId/trips", async (req, res) => {
+router.get("/:userId/trips", auth, authorizeUser(), async (req, res) => {
   try {
     const { userId } = req.params
-    const trips = await Booking.find({ customerId: userId }).populate("customerId hostId listingId")
+    const trips = await Booking.find({ userId }).populate("userId listingId")
     res.status(202).json(trips)
   } catch (err) {
     console.log(err)
@@ -17,7 +18,7 @@ router.get("/:userId/trips", async (req, res) => {
 })
 
 /* ADD LISTING TO WISHLIST */
-router.patch("/:userId/:listingId", async (req, res) => {
+router.patch("/:userId/:listingId", auth, authorizeUser(), async (req, res) => {
   try {
     const { userId, listingId } = req.params
     const user = await User.findById(userId)
@@ -40,8 +41,8 @@ router.patch("/:userId/:listingId", async (req, res) => {
   }
 })
 
-/* GET PROPERTY LIST */
-router.get("/:userId/properties", async (req, res) => {
+/* GET USER LISTINGS */
+router.get("/:userId/properties", auth, authorizeUser(), async (req, res) => {
   try {
     const { userId } = req.params
     const properties = await Listing.find({ creator: userId }).populate("creator")
@@ -52,11 +53,31 @@ router.get("/:userId/properties", async (req, res) => {
   }
 })
 
-/* GET RESERVATION LIST */
-router.get("/:userId/reservations", async (req, res) => {
+/* GET USER WISHLIST */
+router.get("/:userId/wishlist", auth, authorizeUser(), async (req, res) => {
   try {
     const { userId } = req.params
-    const reservations = await Booking.find({ hostId: userId }).populate("customerId hostId listingId")
+    const user = await User.findById(userId).populate({
+      path: "wishList",
+      populate: {
+        path: "creator"
+      }
+    })
+    res.status(202).json(user.wishList)
+  } catch (err) {
+    console.log(err)
+    res.status(404).json({ message: "Can not find wishlist!", error: err.message })
+  }
+})
+
+/* GET RESERVATION LIST */
+router.get("/:userId/reservations", auth, authorizeUser(), async (req, res) => {
+  try {
+    const { userId } = req.params
+    // Get all listings created by this user, then get bookings for those listings
+    const userListings = await Listing.find({ creator: userId })
+    const listingIds = userListings.map(listing => listing._id)
+    const reservations = await Booking.find({ listingId: { $in: listingIds } }).populate("userId listingId")
     res.status(202).json(reservations)
   } catch (err) {
     console.log(err)

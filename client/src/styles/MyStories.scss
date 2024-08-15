@@ -1,0 +1,372 @@
+@import "./variables.scss";
+@import "./breakpoints.scss";
+
+.my-stories-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  padding: 0;
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-size: 1.2rem;
+    color: #4a5568;
+  }
+
+  .error-message {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 16px 20px;
+    margin: 20px 60px;
+    border-radius: 8px;
+    border: 1px solid #feb2b2;
+    text-align: center;
+    font-weight: 500;
+
+    @include sm {
+      margin: 20px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+
+  .my-stories-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 60px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+    }
+
+    @include sm {
+      padding: 40px 20px;
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+
+      h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+        @include sm {
+          font-size: 2rem;
+        }
+      }
+
+      p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 500px;
+        line-height: 1.6;
+
+        @include sm {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .header-actions {
+      position: relative;
+      z-index: 2;
+
+      .write-story-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        backdrop-filter: blur(10px);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+
+  .my-stories-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 60px;
+
+    @include sm {
+      padding: 20px;
+    }
+
+    .no-stories {
+      text-align: center;
+      padding: 80px 20px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+      h3 {
+        font-size: 1.8rem;
+        color: #2d3748;
+        margin-bottom: 10px;
+      }
+
+      p {
+        color: #718096;
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+      }
+
+      .write-first-story-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+      }
+    }
+
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+
+      @include sm {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .story-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #e2e8f0;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-image {
+          position: relative;
+          height: 200px;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          .no-image {
+            width: 100%;
+            height: 100%;
+            background: #f7fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-weight: 500;
+          }
+
+          .story-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+
+            .edit-btn, .delete-btn {
+              width: 36px;
+              height: 36px;
+              border: none;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              backdrop-filter: blur(10px);
+
+              svg {
+                font-size: 18px;
+              }
+            }
+
+            .edit-btn {
+              background: rgba(59, 130, 246, 0.9);
+              color: white;
+
+              &:hover {
+                background: rgba(59, 130, 246, 1);
+                transform: scale(1.1);
+              }
+            }
+
+            .delete-btn {
+              background: rgba(239, 68, 68, 0.9);
+              color: white;
+
+              &:hover {
+                background: rgba(239, 68, 68, 1);
+                transform: scale(1.1);
+              }
+            }
+          }
+        }
+
+        .story-content {
+          padding: 20px;
+
+          .story-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+
+            .category {
+              background: #e2e8f0;
+              color: #4a5568;
+              padding: 4px 12px;
+              border-radius: 20px;
+              font-size: 0.8rem;
+              font-weight: 500;
+              text-transform: capitalize;
+            }
+
+            .date {
+              color: #718096;
+              font-size: 0.8rem;
+            }
+          }
+
+          .story-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 10px;
+            line-height: 1.4;
+          }
+
+          .story-excerpt {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          .story-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+
+            .tag {
+              background: #f7fafc;
+              color: #38a169;
+              padding: 4px 8px;
+              border-radius: 12px;
+              font-size: 0.8rem;
+              font-weight: 500;
+            }
+          }
+
+          .story-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+
+            .like-btn {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              background: none;
+              border: none;
+              color: #718096;
+              cursor: pointer;
+              padding: 8px 12px;
+              border-radius: 8px;
+              transition: all 0.3s ease;
+              font-size: 0.9rem;
+
+              &:hover {
+                background: #f7fafc;
+                color: #38a169;
+              }
+
+              &.liked {
+                color: #e53e3e;
+              }
+
+              svg {
+                font-size: 16px;
+              }
+            }
+
+            .comment-count {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              color: #718096;
+              font-size: 0.9rem;
+
+              svg {
+                font-size: 16px;
+              }
+            }
+
+            .read-time {
+              color: #718096;
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+} 

@@ -1,140 +1,179 @@
-# LiveHere Deployment Guide
+# 🚀 StaySpot Deployment Guide
 
-## Overview
-This guide will help you deploy your LiveHere application to Render.com.
+## 📋 Prerequisites
 
-## Prerequisites
-1. GitHub repository with your code
-2. MongoDB Atlas account (for cloud database)
-3. Render.com account
+- GitHub repository with your code
+- Render account
+- MongoDB database (MongoDB Atlas recommended)
 
-## Step 1: Set up MongoDB Atlas
+## 🔧 Environment Variables
 
-1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create a free account and cluster
-3. Get your connection string
-4. Example connection string: `mongodb+srv://username:password@cluster.mongodb.net/livehere`
+### Backend Environment Variables (Server)
 
-## Step 2: Deploy Backend to Render
+Create these in your Render backend service:
 
-1. Go to [Render Dashboard](https://dashboard.render.com/)
-2. Click "New +" → "Web Service"
-3. Connect your GitHub repository
-4. Configure the service:
-   - **Name**: `livehere-backend`
-   - **Root Directory**: Leave empty (deploy from root)
-   - **Environment**: `Node`
-   - **Build Command**: `cd server && npm install`
-   - **Start Command**: `cd server && npm start`
-   - **Plan**: Free
+```env
+# Database
+MONGODB_URI=your_mongodb_connection_string
 
-5. Add Environment Variables:
-   - `NODE_ENV`: `production`
-   - `PORT`: `10000`
-   - `MONGO_URL`: Your MongoDB Atlas connection string
-   - `JWT_SECRET`: A strong secret key (e.g., `your-super-secret-jwt-key-here`)
+# JWT Secret
+JWT_SECRET=your_jwt_secret_key_here
 
-6. Click "Create Web Service"
+# Server Configuration
+PORT=3001
+NODE_ENV=production
 
-## Step 3: Deploy Frontend to Render
-
-1. In Render Dashboard, click "New +" → "Static Site"
-2. Connect your GitHub repository
-3. Configure the service:
-   - **Name**: `livehere-frontend`
-   - **Root Directory**: Leave empty
-   - **Build Command**: `cd client && npm install && npm run build`
-   - **Publish Directory**: `client/build`
-
-4. Add Environment Variable:
-   - `REACT_APP_API_URL`: Your backend URL (e.g., `https://livehere-backend.onrender.com`)
-
-5. Click "Create Static Site"
-
-## Step 4: Update Frontend API Calls
-
-The frontend is configured to use environment variables for API calls. Make sure all pages use the `apiCall` utility:
-
-```javascript
-import { apiCall } from "../utils/api";
-
-// Instead of:
-// fetch("http://127.0.0.1:3001/auth/login", {...})
-
-// Use:
-// apiCall("/auth/login", {...})
+# CORS (if needed)
+CORS_ORIGIN=https://your-frontend-domain.onrender.com
 ```
 
-## Step 5: Test Your Deployment
+### Frontend Environment Variables (Client)
 
-1. Backend should be available at: `https://your-backend-name.onrender.com`
-2. Frontend should be available at: `https://your-frontend-name.onrender.com`
+Create these in your Render frontend service:
 
-## Troubleshooting
+```env
+# API Configuration
+REACT_APP_API_URL=https://your-backend-domain.onrender.com
 
-### Common Issues:
+# Build Configuration
+GENERATE_SOURCEMAP=false
+```
 
-1. **Build Fails**: Check that all dependencies are in package.json
-2. **Database Connection**: Verify MongoDB connection string
-3. **CORS Issues**: Backend has CORS enabled for all origins
-4. **Environment Variables**: Make sure all required variables are set
+## 🏗️ Render Setup
 
-### Local Testing:
+### 1. Backend Service
 
-1. Create `.env` file in server directory:
-   ```env
-   PORT=5000
-   MONGO_URL=mongodb://localhost:27017/livehere
-   JWT_SECRET=your-secret-key
-   ```
+1. **Create New Web Service**
+   - Connect your GitHub repository
+   - Name: `stayspot-backend`
+   - Root Directory: `server`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
 
-2. Create `.env` file in client directory:
-   ```env
-   REACT_APP_API_URL=http://localhost:5000
-   ```
+2. **Environment Variables**
+   - Add all backend environment variables listed above
 
-3. Start server: `cd server && npm run dev`
-4. Start client: `cd client && npm start`
+3. **Auto-Deploy**
+   - Enable auto-deploy from main branch
 
-## File Structure for Deployment
+### 2. Frontend Service
+
+1. **Create New Static Site**
+   - Connect your GitHub repository
+   - Name: `stayspot-frontend`
+   - Root Directory: `client`
+   - Build Command: `npm install && npm run build`
+   - Publish Directory: `build`
+
+2. **Environment Variables**
+   - Add all frontend environment variables listed above
+
+3. **Auto-Deploy**
+   - Enable auto-deploy from main branch
+
+## 🔒 Security Checklist
+
+✅ **Environment Variables**
+- All sensitive data moved to environment variables
+- No hardcoded secrets in code
+- JWT_SECRET properly configured
+
+✅ **Database Security**
+- MongoDB connection string secured
+- Database user with minimal required permissions
+- Network access properly configured
+
+✅ **API Security**
+- CORS properly configured
+- JWT authentication implemented
+- Input validation on all endpoints
+
+✅ **File Upload Security**
+- File type validation
+- File size limits
+- Secure file storage
+
+## 📁 File Structure for Deployment
 
 ```
-livehere/
-├── client/
-│   ├── package.json          ✅ Required
+stayspot/
+├── client/                 # Frontend (React)
+│   ├── public/
 │   ├── src/
-│   └── .env                  ❌ Not in git (sensitive)
-├── server/
-│   ├── package.json          ✅ Required
-│   ├── models/               ✅ Required
-│   ├── routes/               ✅ Required
-│   └── .env                  ❌ Not in git (sensitive)
-├── .gitignore               ✅ Required
-├── render.yaml              ✅ Optional (for auto-deploy)
-└── README.md                ✅ Required
+│   ├── package.json
+│   └── build/             # Generated on build
+├── server/                # Backend (Node.js)
+│   ├── routes/
+│   ├── models/
+│   ├── middleware/
+│   ├── public/uploads/    # User uploaded files
+│   └── package.json
+├── .gitignore            # Properly configured
+├── render.yaml           # Render configuration
+└── README.md
 ```
 
-## Environment Variables Summary
+## 🚀 Deployment Steps
 
-### Backend (.env):
-- `PORT`: Server port (5000 for local, 10000 for Render)
-- `MONGO_URL`: MongoDB connection string
-- `JWT_SECRET`: Secret key for JWT tokens
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "🚀 Deploy to Render"
+   git push origin main
+   ```
 
-### Frontend (.env):
-- `REACT_APP_API_URL`: Backend API URL
+2. **Create Render Services**
+   - Backend: Web Service
+   - Frontend: Static Site
 
-## Security Notes
+3. **Configure Environment Variables**
+   - Add all required environment variables
 
-1. Never commit `.env` files to Git
-2. Use strong JWT secrets in production
-3. Enable MongoDB Atlas network access for Render IPs
-4. Consider using environment-specific configurations
+4. **Deploy**
+   - Render will automatically build and deploy
+   - Monitor deployment logs for any issues
 
-## Support
+## 🔍 Troubleshooting
+
+### Common Issues
+
+1. **Build Failures**
+   - Check Node.js version compatibility
+   - Verify all dependencies in package.json
+   - Check build logs for specific errors
+
+2. **Environment Variables**
+   - Ensure all variables are properly set
+   - Check variable names match code
+   - Verify no typos in values
+
+3. **Database Connection**
+   - Verify MongoDB URI is correct
+   - Check network access from Render
+   - Ensure database is running
+
+4. **CORS Issues**
+   - Update CORS_ORIGIN to match frontend URL
+   - Check browser console for CORS errors
+
+### Monitoring
+
+- Use Render's built-in logging
+- Monitor application performance
+- Set up alerts for downtime
+
+## 📞 Support
 
 If you encounter issues:
-1. Check Render logs in the dashboard
-2. Verify environment variables are set correctly
-3. Test locally first
-4. Check MongoDB Atlas connection 
+1. Check Render deployment logs
+2. Verify environment variables
+3. Test locally with production settings
+4. Check MongoDB connection
+
+## 🎉 Success!
+
+Once deployed, your StaySpot application will be available at:
+- Frontend: `https://your-app-name.onrender.com`
+- Backend: `https://your-backend-name.onrender.com`
+
+The application will automatically restart on code changes and maintain high availability. 

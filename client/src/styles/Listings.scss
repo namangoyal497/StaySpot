@@ -38,6 +38,65 @@
   }
 }
 
+.listings-filter {
+  padding: 40px 60px 20px;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+
+  @include lg {
+    padding: 40px 20px 20px;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $darkgrey;
+    margin-bottom: 20px;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .filter-options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Nunito', sans-serif;
+
+    @include sm {
+      gap: 30px;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: $darkgrey;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+
+      .filter-icon {
+        font-size: 30px;
+      }
+
+      span {
+        font-size: 18px;
+        font-weight: 700;
+        font-family: 'Nunito', sans-serif;
+      }
+
+      &:hover {
+        color: $pinkred;
+      }
+
+      &.active {
+        color: $pinkred;
+      }
+    }
+  }
+}
+
 .listings {
   padding: 0 60px 120px;
   display: flex;

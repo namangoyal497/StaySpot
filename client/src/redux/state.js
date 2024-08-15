@@ -1,9 +1,26 @@
 import { createSlice} from "@reduxjs/toolkit"
 
-const initialState = {
-  user: null,
-  token: null,
-}
+// Initialize state from localStorage if available
+const getInitialState = () => {
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
+  
+  if (token && user) {
+    return {
+      user: JSON.parse(user),
+      token: token,
+      listings: [],
+    };
+  }
+  
+  return {
+    user: null,
+    token: null,
+    listings: [],
+  };
+};
+
+const initialState = getInitialState();
 
 export const userSlice = createSlice({
   name: "user",
@@ -16,6 +33,9 @@ export const userSlice = createSlice({
     setLogout: (state) => {
       state.user = null
       state.token = null
+      // Clear localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
     setListings: (state, action) => {
       state.listings = action.payload.listings

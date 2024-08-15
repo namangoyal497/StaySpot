@@ -18,18 +18,22 @@ const LoginPage = () => {
     e.preventDefault()
 
     try {
-      const data = await apiCall("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password })
-      });
+      console.log("Attempting login for:", email);
+      const data = await apiCall("/auth/login", "POST", { email, password });
 
-      dispatch(
-        setLogin({
-          user: data.user,
-          token: data.token,
-        })
-      );
-      navigate("/");
+      console.log("Login response:", data);
+
+        // Store token and user in localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        dispatch(
+          setLogin({
+            user: data.user,
+            token: data.token,
+          })
+        );
+        navigate("/");
     } catch (err) {
       console.log("Login failed", err.message);
       setErrorMessage("Login failed. Please try again later.");
@@ -58,7 +62,7 @@ const LoginPage = () => {
              {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <button type="submit">LOG IN</button>
         </form>
-        <a href="/register">Don't have an account? Sign In Here</a>
+        <a href="/register">Don't have an account? Sign Up Here</a>
         {/* <a href="/forgot-password" className="forgot-password-link">
           Forgot your password?
         </a> */}

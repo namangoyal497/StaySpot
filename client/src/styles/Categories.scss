@@ -79,6 +79,21 @@
         }
       }
 
+      &.selected {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
+        
+        .overlay {
+          background-color: rgba(56, 161, 105, 0.7);
+        }
+        
+        .category_text {
+          p {
+            color: #38a169;
+            font-weight: 700;
+          }
+        }
+      }
     }
   }
 }

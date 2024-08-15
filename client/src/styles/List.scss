@@ -22,3 +22,41 @@
     padding: 0 20px 120px;
   }
 }
+
+.reservation-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .host-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 500px;
+
+  h2 {
+    color: #2d3748;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+  }
+
+  p {
+    color: #718096;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+}

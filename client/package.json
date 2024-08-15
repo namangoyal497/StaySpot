@@ -1,7 +1,7 @@
 {
-  "name": "livehere-client",
+  "name": "stayspot-client",
   "version": "1.0.0",
-  "description": "Frontend client for LiveHere rental application",
+  "description": "StaySpot rental property frontend application",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
@@ -11,7 +11,17 @@
     "redux": "^4.2.1",
     "react-redux": "^8.1.2",
     "@reduxjs/toolkit": "^1.9.5",
-    "axios": "^1.5.0"
+    "axios": "^1.5.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/material": "^5.14.5",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-date-range": "^1.4.0",
+    "react-icons": "^4.11.0",
+    "redux-persist": "^6.0.0",
+    "sass": "^1.66.1",
+    "date-fns": "^2.30.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,5 +47,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
-} 
+  "proxy": "http://localhost:3001"
+}

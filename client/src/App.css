@@ -4,3 +4,12 @@
   box-sizing: border-box;
   font-family: 'Nunito', sans-serif;
 }
+
+/* Ensure no purple filters on images */
+img {
+  filter: none !important;
+  -webkit-filter: none !important;
+  -moz-filter: none !important;
+  -ms-filter: none !important;
+  -o-filter: none !important;
+}

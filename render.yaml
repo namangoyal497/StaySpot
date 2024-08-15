@@ -1,7 +1,7 @@
 services:
   # Backend API
   - type: web
-    name: livehere-backend
+    name: stayspot-backend
     env: node
     buildCommand: cd server && npm install
     startCommand: cd server && npm start
@@ -17,10 +17,10 @@ services:
 
   # Frontend
   - type: web
-    name: livehere-frontend
+    name: stayspot-frontend
     env: static
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: ./client/build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://livehere-backend.onrender.com 
+        value: https://stayspot-backend.onrender.com 
