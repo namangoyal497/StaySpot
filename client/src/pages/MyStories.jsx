@@ -7,14 +7,13 @@ import {
   Comment,
   Edit,
   Delete,
-  Add
+  Add,
+  Settings
 } from "@mui/icons-material";
 import "../styles/MyStories.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { apiCall, getImageUrl } from "../utils/api";
-import { useNavigate } from "react-router-dom";
-import { Settings } from "@mui/icons-material";
 
 const MyStories = () => {
   const [blogs, setBlogs] = useState([]);
