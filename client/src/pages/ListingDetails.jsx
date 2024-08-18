@@ -30,7 +30,7 @@ const ListingDetails = () => {
 
   useEffect(() => {
     getListingDetails();
-  }, []);
+  }, [listingId]);
 
 
 
@@ -116,7 +116,7 @@ const ListingDetails = () => {
 
         <div className="profile">
           <img
-            src={getImageUrl(listing.creator.profileImagePath)} alt=""
+            src={getImageUrl(listing.creator.profileImagePath) || "/assets/phucmai.png"} alt=""
           />
           <h3>
             Hosted by {listing.creator.firstName} {listing.creator.lastName}

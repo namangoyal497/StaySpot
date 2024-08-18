@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Edit, CloudUpload, Check, Close } from '@mui/icons-material';
 import { apiCall } from '../utils/api';
 

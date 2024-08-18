@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import "../styles/Register.scss";
+import { apiCall } from "../utils/api";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,6 @@ const RegisterPage = () => {
     const { name, value, files } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
       [name]: name === "profileImage" ? files[0] : value,
     });
   };
@@ -35,25 +35,30 @@ const RegisterPage = () => {
     try {
       const register_form = new FormData()
 
-      for (var key in formData) {
-        register_form.append(key, formData[key])
+      // Add form data to FormData object
+      register_form.append('firstName', formData.firstName)
+      register_form.append('lastName', formData.lastName)
+      register_form.append('email', formData.email)
+      register_form.append('password', formData.password)
+      
+      // Add profile image if selected
+      if (formData.profileImage) {
+        register_form.append('profileImage', formData.profileImage)
       }
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3001'}/auth/register`, {
-        method: "POST",
-        body: register_form
-      })
+      console.log("Attempting registration for:", formData.email);
+      
+      const response = await apiCall("/auth/register", "POST", register_form, {
+        headers: {
+          // Don't set Content-Type, let browser set it with boundary
+        }
+      });
 
-      if (response.ok) {
-        navigate("/login")
-      }
-      else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || "Registration failed");
-      }
+      console.log("Registration successful:", response);
+      navigate("/login")
     } catch (err) {
-      console.log("Registration failed", err.message);
-      setErrorMessage("Registration failed. Please try again later.");
+      console.error("Registration failed:", err);
+      setErrorMessage(err.message || "Registration failed. Please try again later.");
     }
   }
 

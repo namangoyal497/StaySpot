@@ -13,22 +13,22 @@ import storage from "redux-persist/lib/storage";
 import state from "./state";
 
 // Initialize state from localStorage if available
-const initializeState = () => {
-  const token = localStorage.getItem('token');
-  const user = localStorage.getItem('user');
-  
-  if (token && user) {
-    return {
-      user: JSON.parse(user),
-      token: token,
-    };
-  }
-  
-  return {
-    user: null,
-    token: null,
-  };
-};
+// const initializeState = () => {
+//   const token = localStorage.getItem('token');
+//   const user = localStorage.getItem('user');
+//   
+//   if (token && user) {
+//     return {
+//       user: JSON.parse(user),
+//       token: token,
+//     };
+//   }
+//   
+//   return {
+//     user: null,
+//     token: null,
+//   };
+// };
 
 const persistConfig = {
   key: "root",

@@ -47,10 +47,16 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
+    console.log("MongoDB connected successfully");
     // Initialize GridFS after MongoDB connection
-    initGridFS();
+    try {
+      initGridFS();
+      console.log("GridFS initialized successfully");
+    } catch (error) {
+      console.error("Error initializing GridFS:", error);
+    }
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })
-  .catch((err) => console.log(`${err} did not connect`));
+  .catch((err) => console.log(`MongoDB connection failed: ${err}`));
 
   

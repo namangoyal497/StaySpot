@@ -19,7 +19,7 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const data = await apiCall(`/auth/reset-password/${token}`, "POST", { password });
+      await apiCall(`/auth/reset-password/${token}`, "POST", { password });
 
       setMessage("Password reset successfully");
       navigate("/login");

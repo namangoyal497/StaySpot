@@ -97,6 +97,8 @@ router.post("/login", async (req, res) => {
 
     /* Generate JWT token */
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+    console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
+    console.log("Generated token:", token.substring(0, 20) + "...");
     delete user.password
 
     console.log("Login successful for user:", email);

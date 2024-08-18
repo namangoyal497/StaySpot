@@ -127,7 +127,7 @@ const BlogDetail = () => {
             <div className="blog-meta">
               <div className="author">
                 <img 
-                  src={getImageUrl(blog.author?.profileImagePath) || getImageUrl("uploads/default-profile.jpg")} 
+                  src={getImageUrl(blog.author?.profileImagePath) || "/assets/phucmai.png"} 
                   alt={blog.author?.firstName || "Author"}
                 />
                 <div>
@@ -210,7 +210,7 @@ const BlogDetail = () => {
                   <div key={index} className="comment">
                     <div className="comment-author">
                       <img 
-                        src={getImageUrl(comment.user?.profileImagePath) || getImageUrl("uploads/default-profile.jpg")} 
+                        src={getImageUrl(comment.user?.profileImagePath) || "/assets/phucmai.png"} 
                         alt={comment.user?.firstName || "User"}
                       />
                       <div>

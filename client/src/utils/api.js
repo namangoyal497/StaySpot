@@ -29,6 +29,8 @@ export const apiCall = async (endpoint, method = 'GET', body = null, options = {
   }
 
   console.log("Making API call to:", url);
+  console.log("Token exists:", !!token);
+  console.log("Token value:", token ? token.substring(0, 20) + "..." : "No token");
   console.log("Request options:", { ...defaultOptions, ...options });
   
   try {
@@ -69,6 +71,6 @@ export const getImageUrl = (imagePath) => {
     return imagePath;
   }
   // Remove 'public/' prefix if present and serve from GridFS
-  const filename = imagePath.replace('public/', '').replace('uploads/', '');
+  const filename = imagePath.replace('public/', '').replace('uploads/', '').replace(/\\/g, '/');
   return `${API_BASE_URL}/files/${filename}`;
 }; 

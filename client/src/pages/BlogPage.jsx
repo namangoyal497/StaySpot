@@ -248,7 +248,7 @@ const BlogPage = () => {
                   <div className="blog-meta">
                     <div className="author">
                       <img 
-                        src={getImageUrl(blog.author.profileImagePath)} 
+                        src={getImageUrl(blog.author.profileImagePath) || "/assets/phucmai.png"} 
                         alt={blog.author.firstName}
                       />
                       <span>{blog.author.firstName} {blog.author.lastName}</span>

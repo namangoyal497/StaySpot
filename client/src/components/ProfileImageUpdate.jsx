@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Edit, CloudUpload, Check, Close } from '@mui/icons-material';
-import { apiCall } from '../utils/api';
+import { apiCall, getImageUrl } from '../utils/api';
 import { setUser } from '../redux/state';
 
 const ProfileImageUpdate = () => {
@@ -62,6 +62,7 @@ const ProfileImageUpdate = () => {
       formData.append('profileImage', selectedFile);
 
       console.log('Updating profile image for user:', user._id);
+      console.log('User object:', user);
       console.log('Token exists:', !!token);
 
       const response = await apiCall(`/users/${user._id}/profile-image`, 'PATCH', formData, {
@@ -101,7 +102,7 @@ const ProfileImageUpdate = () => {
       {!isEditing ? (
         <div className="profile-image-display">
           <img
-            src={user.profileImagePath ? `/files/${user.profileImagePath}` : '/assets/default-profile.jpg'}
+            src={user.profileImagePath ? getImageUrl(user.profileImagePath) : '/assets/phucmai.png'}
             alt="Profile"
             className="profile-image"
           />

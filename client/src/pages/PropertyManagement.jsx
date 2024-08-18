@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowBack, Edit, Delete } from '@mui/icons-material';
-import { apiCall, getImageUrl } from '../utils/api';
+import { apiCall } from '../utils/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PropertyImagesUpdate from '../components/PropertyImagesUpdate';

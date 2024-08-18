@@ -5,13 +5,24 @@ let gfs;
 
 // Initialize GridFS
 const initGridFS = () => {
-  gfs = Grid(mongoose.connection.db, mongoose.mongo);
-  gfs.collection('uploads');
+  try {
+    gfs = Grid(mongoose.connection.db, mongoose.mongo);
+    gfs.collection('uploads');
+    console.log("GridFS initialized with collection 'uploads'");
+  } catch (error) {
+    console.error("Error initializing GridFS:", error);
+    throw error;
+  }
 };
 
 // Upload file to GridFS
 const uploadToGridFS = (file) => {
   return new Promise((resolve, reject) => {
+    if (!gfs) {
+      reject(new Error('GridFS not initialized'));
+      return;
+    }
+
     const writeStream = gfs.createWriteStream({
       filename: file.originalname,
       metadata: {
@@ -21,10 +32,12 @@ const uploadToGridFS = (file) => {
     });
 
     writeStream.on('error', (error) => {
+      console.error('GridFS upload error:', error);
       reject(error);
     });
 
     writeStream.on('close', (file) => {
+      console.log('File uploaded to GridFS:', file.filename);
       resolve(file);
     });
 

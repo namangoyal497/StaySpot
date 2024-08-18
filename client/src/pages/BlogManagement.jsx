@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowBack, Edit, Delete } from '@mui/icons-material';
-import { apiCall, getImageUrl } from '../utils/api';
+import { apiCall } from '../utils/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BlogImagesUpdate from '../components/BlogImagesUpdate';
@@ -17,11 +17,7 @@ const BlogManagement = () => {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchBlog();
-  }, [blogId]);
-
-  const fetchBlog = async () => {
+  const fetchBlog = useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiCall(`/blog/${blogId}`);
@@ -32,7 +28,11 @@ const BlogManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [blogId]);
+
+  useEffect(() => {
+    fetchBlog();
+  }, [blogId]);
 
   const handleImagesUpdate = (updatedBlog) => {
     setBlog(updatedBlog);
