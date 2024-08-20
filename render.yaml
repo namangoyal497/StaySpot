@@ -3,7 +3,7 @@ services:
     name: stayspot-app
     env: node
     plan: free
-    buildCommand: cd server && npm install && cd ../client && npm install && GENERATE_SOURCEMAP=false NODE_OPTIONS=--max-old-space-size=12288 npm run build
+    buildCommand: chmod +x build-light.sh && ./build-light.sh
     startCommand: cd server && npm start
     envVars:
       - key: NODE_ENV
