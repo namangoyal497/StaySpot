@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
+const path = require("path");
 
 const authRoutes = require("./routes/auth.js")
 const listingRoutes = require("./routes/listing.js")
@@ -20,7 +21,7 @@ app.use("/users", userRoutes)
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT;
-const __dirname=path.resolve()
+const dirname = path.resolve();
 mongoose
   .connect(process.env.MONGO_URL, {
     dbName: "LiveHere",
