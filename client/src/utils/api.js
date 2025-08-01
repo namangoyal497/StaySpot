@@ -34,7 +34,17 @@ export const apiCall = async (endpoint, method = 'GET', body = null, options = {
   console.log("Request options:", { ...defaultOptions, ...options });
   
   try {
-    const response = await fetch(url, { ...defaultOptions, ...options });
+    // Add timeout to fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+    
+    const response = await fetch(url, { 
+      ...defaultOptions, 
+      ...options,
+      signal: controller.signal 
+    });
+    
+    clearTimeout(timeoutId);
     
     console.log("Response status:", response.status);
     console.log("Response ok:", response.ok);

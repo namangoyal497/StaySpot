@@ -36,7 +36,14 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
     if (profileImage) {
       try {
         console.log("Attempting to upload profile image:", profileImage.originalname);
-        const uploadedFile = await uploadToGridFS(profileImage);
+        
+        // Add timeout to GridFS upload
+        const uploadPromise = uploadToGridFS(profileImage);
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('GridFS upload timeout')), 30000)
+        );
+        
+        const uploadedFile = await Promise.race([uploadPromise, timeoutPromise]);
         profileImagePath = uploadedFile.filename;
         console.log("Profile image uploaded to GridFS:", profileImagePath);
       } catch (uploadError) {

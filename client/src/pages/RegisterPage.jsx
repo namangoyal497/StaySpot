@@ -65,6 +65,7 @@ const RegisterPage = () => {
         console.log(key, value);
       }
       
+      console.log("Sending registration request...");
       const response = await apiCall("/auth/register", "POST", register_form, {
         headers: {
           // Don't set Content-Type, let browser set it with boundary
