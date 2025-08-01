@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: stayspot-app
+    name: stayspot-app-fresh
     env: node
     plan: free
     # FORCE SERVER ONLY BUILD - NO CLIENT BUILD
