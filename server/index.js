@@ -54,6 +54,7 @@ mongoose
       console.log("GridFS initialized successfully");
     } catch (error) {
       console.error("Error initializing GridFS:", error);
+      console.error("GridFS initialization failed, but continuing...");
     }
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })

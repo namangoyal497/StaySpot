@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "../styles/ListingDetails.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { facilities } from "../data";
@@ -18,7 +18,7 @@ const ListingDetails = () => {
   const { listingId } = useParams();
   const [listing, setListing] = useState(null);
 
-  const getListingDetails = async () => {
+  const getListingDetails = useCallback(async () => {
     try {
       const data = await apiCall(`/properties/${listingId}`);
       setListing(data);
@@ -26,11 +26,11 @@ const ListingDetails = () => {
     } catch (err) {
       console.log("Fetch Listing Details Failed", err.message);
     }
-  };
+  }, [listingId]);
 
   useEffect(() => {
     getListingDetails();
-  }, [listingId]);
+  }, [getListingDetails]);
 
 
 

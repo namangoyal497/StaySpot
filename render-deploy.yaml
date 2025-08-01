@@ -3,7 +3,7 @@ services:
     name: stayspot-app
     env: node
     plan: free
-    buildCommand: echo "Build skipped - using pre-built React app" && echo "No build process needed"
+    buildCommand: echo "Build skipped - using pre-built React app"
     startCommand: cd server && npm start
     envVars:
       - key: NODE_ENV
@@ -13,8 +13,4 @@ services:
       - key: PORT
         value: 10000
       - key: MONGO_URL
-        sync: false
-      - key: GENERATE_SOURCEMAP
-        value: false
-      - key: NODE_OPTIONS
-        value: --max-old-space-size=2048 
+        sync: false 

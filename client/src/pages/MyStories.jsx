@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { 
@@ -24,13 +24,7 @@ const MyStories = () => {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (userId) {
-      fetchMyStories();
-    }
-  }, [userId]);
-
-  const fetchMyStories = async () => {
+  const fetchMyStories = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -43,7 +37,13 @@ const MyStories = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchMyStories();
+    }
+  }, [userId, fetchMyStories]);
 
   const handleLike = async (blogId) => {
     try {

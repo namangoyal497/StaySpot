@@ -91,14 +91,11 @@ router.get("/:userId/reservations", auth, authorizeUser(), async (req, res) => {
 })
 
 /* UPDATE USER PROFILE IMAGE */
-router.patch("/:userId/profile-image", auth, upload.single("profileImage"), async (req, res) => {
+router.patch("/:userId/profile-image", auth, authorizeUser(), upload.single("profileImage"), async (req, res) => {
   try {
     const { userId } = req.params;
     
-    // Check if user is updating their own profile
-    if (req.user._id.toString() !== userId) {
-      return res.status(403).json({ message: "You can only update your own profile" });
-    }
+
 
     const user = await User.findById(userId);
     if (!user) {

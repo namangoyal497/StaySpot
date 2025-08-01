@@ -32,7 +32,7 @@ const BlogManagement = () => {
 
   useEffect(() => {
     fetchBlog();
-  }, [blogId]);
+  }, [fetchBlog]);
 
   const handleImagesUpdate = (updatedBlog) => {
     setBlog(updatedBlog);

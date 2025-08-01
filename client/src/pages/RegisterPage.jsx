@@ -15,10 +15,18 @@ const RegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: name === "profileImage" ? files[0] : value,
-    });
+    if (name === "profileImage") {
+      console.log("File selected:", files[0]);
+      setFormData({
+        ...formData,
+        [name]: files[0],
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const [passwordMatch, setPasswordMatch] = useState(true)
@@ -44,9 +52,18 @@ const RegisterPage = () => {
       // Add profile image if selected
       if (formData.profileImage) {
         register_form.append('profileImage', formData.profileImage)
+        console.log("Profile image added to FormData:", formData.profileImage.name);
+        console.log("Profile image size:", formData.profileImage.size);
+        console.log("Profile image type:", formData.profileImage.type);
+      } else {
+        console.log("No profile image selected");
       }
 
       console.log("Attempting registration for:", formData.email);
+      console.log("FormData contents:");
+      for (let [key, value] of register_form.entries()) {
+        console.log(key, value);
+      }
       
       const response = await apiCall("/auth/register", "POST", register_form, {
         headers: {
@@ -116,7 +133,6 @@ const RegisterPage = () => {
             accept="image/*"
             style={{ display: "none" }}
             onChange={handleChange}
-            required
           />
           <label htmlFor="image">
             <img src="/assets/addImage.png" alt="add profile" />

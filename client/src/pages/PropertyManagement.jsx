@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowBack, Edit, Delete } from '@mui/icons-material';
@@ -17,11 +17,7 @@ const PropertyManagement = () => {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchListing();
-  }, [listingId]);
-
-  const fetchListing = async () => {
+  const fetchListing = useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiCall(`/properties/${listingId}`);
@@ -32,7 +28,11 @@ const PropertyManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [listingId]);
+
+  useEffect(() => {
+    fetchListing();
+  }, [fetchListing]);
 
   const handleImagesUpdate = (updatedListing) => {
     setListing(updatedListing);

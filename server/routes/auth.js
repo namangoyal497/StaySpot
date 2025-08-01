@@ -14,25 +14,42 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
     console.log("Registration attempt with body:", req.body);
     console.log("Profile image file:", req.file);
+    console.log("Request headers:", req.headers);
+    console.log("Content-Type:", req.headers['content-type']);
 
     /* Take all information from the form */
     const { firstName, lastName, email, password } = req.body;
 
     /* The uploaded file is available as req.file */
     const profileImage = req.file;
+    
+    console.log("Profile image details:", {
+      exists: !!profileImage,
+      originalname: profileImage?.originalname,
+      mimetype: profileImage?.mimetype,
+      size: profileImage?.size,
+      buffer: profileImage?.buffer ? 'Buffer exists' : 'No buffer'
+    });
 
     /* Upload to GridFS if file exists */
     let profileImagePath = "";
     if (profileImage) {
       try {
+        console.log("Attempting to upload profile image:", profileImage.originalname);
         const uploadedFile = await uploadToGridFS(profileImage);
         profileImagePath = uploadedFile.filename;
         console.log("Profile image uploaded to GridFS:", profileImagePath);
       } catch (uploadError) {
         console.error("Error uploading to GridFS:", uploadError);
+        console.error("Upload error details:", {
+          message: uploadError.message,
+          stack: uploadError.stack
+        });
         // Continue without profile image if upload fails
         profileImagePath = "";
       }
+    } else {
+      console.log("No profile image provided in registration");
     }
 
     /* Check if user exists */

@@ -65,7 +65,7 @@ export const apiCall = async (endpoint, method = 'GET', body = null, options = {
 
 // Helper function to get image URL
 export const getImageUrl = (imagePath) => {
-  if (!imagePath) return '';
+  if (!imagePath || imagePath === '') return '';
   // If it's already a full URL, return as is
   if (imagePath.startsWith('http')) {
     return imagePath;
