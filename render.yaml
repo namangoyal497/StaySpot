@@ -3,7 +3,7 @@ services:
     name: stayspot-app
     env: node
     plan: free
-    buildCommand: cd server && npm install && cd ../client && npm install && npm run build:light
+    buildCommand: chmod +x build-staged.sh && ./build-staged.sh
     startCommand: cd server && npm start
     envVars:
       - key: NODE_ENV

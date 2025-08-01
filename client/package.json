@@ -29,6 +29,7 @@
     "build:prod": "set GENERATE_SOURCEMAP=false && set NODE_OPTIONS=--max-old-space-size=8192 --optimize-for-size && react-scripts build",
     "build:minimal": "set GENERATE_SOURCEMAP=false && set NODE_OPTIONS=--max-old-space-size=4096 && set CI=false && react-scripts build",
     "build:light": "set GENERATE_SOURCEMAP=false && set NODE_OPTIONS=--max-old-space-size=2048 && set CI=false && set DISABLE_ESLINT_PLUGIN=true && react-scripts build",
+    "build:ultra": "set GENERATE_SOURCEMAP=false && set NODE_OPTIONS=--max-old-space-size=1024 && set CI=false && set DISABLE_ESLINT_PLUGIN=true && set SKIP_PREFLIGHT_CHECK=true && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
