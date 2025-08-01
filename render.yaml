@@ -3,7 +3,7 @@ services:
     name: stayspot-app
     env: node
     plan: free
-    buildCommand: echo "Build skipped - using pre-built React app" && echo "No build process needed"
+    buildCommand: cd server && npm install && cd ../client && npm install && npm run build:render
     startCommand: cd server && npm start
     envVars:
       - key: NODE_ENV
@@ -17,4 +17,12 @@ services:
       - key: GENERATE_SOURCEMAP
         value: false
       - key: NODE_OPTIONS
-        value: --max-old-space-size=2048 
+        value: --max-old-space-size=128
+      - key: GENERATE_SOURCEMAP
+        value: false
+      - key: CI
+        value: false
+      - key: DISABLE_ESLINT_PLUGIN
+        value: true
+      - key: SKIP_PREFLIGHT_CHECK
+        value: true 
