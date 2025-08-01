@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Edit, CloudUpload, Check, Close } from '@mui/icons-material';
-import { apiCall, getImageUrl } from '../utils/api';
+import { apiCall, getProfileImageUrl } from '../utils/api';
 import { setUser } from '../redux/state';
 
 const ProfileImageUpdate = () => {
@@ -10,6 +10,7 @@ const ProfileImageUpdate = () => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageVersion, setImageVersion] = useState(0);
 
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -64,15 +65,20 @@ const ProfileImageUpdate = () => {
       console.log('Updating profile image for user:', user._id);
       console.log('User object:', user);
       console.log('Token exists:', !!token);
+      console.log('Token value:', token ? token.substring(0, 50) + "..." : "No token");
+      console.log('API URL:', `/users/${user._id}/update-profile-image`);
 
-      const response = await apiCall(`/users/${user._id}/profile-image`, 'PATCH', formData, {
+      const response = await apiCall(`/users/${user._id}/update-profile-image`, 'PATCH', formData, {
         headers: {
           // Don't set Content-Type, let browser set it with boundary
         }
       });
 
-      // Update user in Redux store
-      dispatch(setUser({ ...user, profileImagePath: response.user.profileImagePath }));
+      // Update user in Redux store with the complete user object from response
+      dispatch(setUser(response.user));
+
+      // Force image refresh
+      setImageVersion(prev => prev + 1);
 
       // Reset form
       setSelectedFile(null);
@@ -101,11 +107,11 @@ const ProfileImageUpdate = () => {
     <div className="profile-image-update">
       {!isEditing ? (
         <div className="profile-image-display">
-          <img
-            src={user.profileImagePath ? getImageUrl(user.profileImagePath) : '/assets/phucmai.png'}
-            alt="Profile"
-            className="profile-image"
-          />
+                  <img
+          src={user.profileImage ? `${getProfileImageUrl(user._id)}?v=${imageVersion}` : '/assets/phucmai.png'}
+          alt="Profile"
+          className="profile-image"
+        />
           <button
             className="edit-image-btn"
             onClick={() => setIsEditing(true)}

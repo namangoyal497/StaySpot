@@ -34,7 +34,7 @@ router.post("/create", auth, async (req, res) => {
 })
 
 /* GET USER BOOKINGS */
-router.get("/user/:userId", auth, authorizeUser(), async (req, res) => {
+router.get("/user/:userId", auth, authorizeUser("userId"), async (req, res) => {
   try {
     const { userId } = req.params
     const bookings = await Booking.find({ userId }).populate("listingId")

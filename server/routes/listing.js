@@ -3,7 +3,7 @@ const multer = require("multer");
 
 const Listing = require("../models/Listing");
 const User = require("../models/User");
-const { uploadToGridFS, deleteFile } = require("../utils/gridfs");
+
 const { auth } = require("../middleware/auth");
 
 /* Configuration Multer for Memory Storage */
@@ -40,11 +40,13 @@ router.post("/create", upload.array("listingPhotos"), async (req, res) => {
       return res.status(400).send("No file uploaded.")
     }
 
-    // Upload all photos to GridFS
-    const listingPhotoPaths = [];
+    // Store all photos as Buffers
+    const listingPhotoData = [];
     for (const file of listingPhotos) {
-      const uploadedFile = await uploadToGridFS(file);
-      listingPhotoPaths.push(uploadedFile.filename);
+      listingPhotoData.push({
+        data: file.buffer,
+        contentType: file.mimetype
+      });
     }
 
     const newListing = new Listing({
@@ -61,7 +63,7 @@ router.post("/create", upload.array("listingPhotos"), async (req, res) => {
       bedCount,
       bathroomCount,
       amenities,
-      listingPhotoPaths,
+      listingPhotos: listingPhotoData,
       title,
       description,
       highlight,
@@ -93,28 +95,19 @@ router.patch("/:listingId/images", auth, upload.array("listingPhotos"), async (r
       return res.status(403).json({ message: "You can only update your own listings" });
     }
 
-    // Delete old images if they exist
-    if (listing.listingPhotoPaths && listing.listingPhotoPaths.length > 0) {
-      for (const oldImagePath of listing.listingPhotoPaths) {
-        try {
-          await deleteFile(oldImagePath);
-        } catch (error) {
-          console.log("Error deleting old image:", error);
-        }
-      }
-    }
-
-    // Upload new images
-    const newListingPhotoPaths = [];
+    // Store new images as Buffers
+    const newListingPhotoData = [];
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
-        const uploadedFile = await uploadToGridFS(file);
-        newListingPhotoPaths.push(uploadedFile.filename);
+        newListingPhotoData.push({
+          data: file.buffer,
+          contentType: file.mimetype
+        });
       }
     }
 
     // Update listing with new images
-    listing.listingPhotoPaths = newListingPhotoPaths;
+    listing.listingPhotos = newListingPhotoData;
     await listing.save();
 
     res.status(200).json({ 
@@ -122,7 +115,7 @@ router.patch("/:listingId/images", auth, upload.array("listingPhotos"), async (r
       listing: {
         _id: listing._id,
         title: listing.title,
-        listingPhotoPaths: listing.listingPhotoPaths
+        listingPhotos: listing.listingPhotos
       }
     });
   } catch (err) {
@@ -138,7 +131,10 @@ router.get("/", async (req, res) => {
   try {
     let listings
     if (qCategory) {
-      listings = await Listing.find({ category: qCategory }).populate("creator")
+      // Use case-insensitive matching for all categories
+      listings = await Listing.find({ 
+        category: { $regex: qCategory, $options: "i" } 
+      }).populate("creator")
     } else {
       listings = await Listing.find().populate("creator")
     }
@@ -185,5 +181,30 @@ router.get("/:listingId", async (req, res) => {
     res.status(404).json({ message: "Listing can not found!", error: err.message })
   }
 })
+
+/* GET LISTING IMAGE */
+router.get("/:listingId/images/:imageIndex", async (req, res) => {
+  try {
+    const { listingId, imageIndex } = req.params;
+    const listing = await Listing.findById(listingId);
+    
+    if (!listing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+
+    if (!listing.listingPhotos || !listing.listingPhotos[imageIndex]) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const image = listing.listingPhotos[imageIndex];
+    
+    // Set the appropriate content type
+    res.set('Content-Type', image.contentType);
+    res.send(image.data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to get listing image", error: err.message });
+  }
+});
 
 module.exports = router

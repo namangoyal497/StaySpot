@@ -48,13 +48,20 @@ const authorizeUser = (paramName = "userId") => {
   return (req, res, next) => {
     const requestedUserId = req.params[paramName];
     
+    console.log("AuthorizeUser middleware - Param name:", paramName);
+    console.log("AuthorizeUser middleware - Requested user ID:", requestedUserId);
+    console.log("AuthorizeUser middleware - Authenticated user ID:", req.user._id);
+    console.log("AuthorizeUser middleware - IDs match:", req.user._id.toString() === requestedUserId);
+    
     // Check if user is accessing their own data
     if (req.user._id.toString() !== requestedUserId) {
+      console.log("AuthorizeUser middleware - Access denied");
       return res.status(403).json({ 
         message: "Access denied. You can only access your own data." 
       });
     }
     
+    console.log("AuthorizeUser middleware - Access granted");
     next();
   };
 };

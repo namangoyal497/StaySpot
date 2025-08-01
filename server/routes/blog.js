@@ -4,7 +4,7 @@ const User = require("../models/User");
 const multer = require("multer");
 const path = require("path");
 const { auth, authorizeUser } = require("../middleware/auth");
-const { uploadToGridFS, deleteFile } = require("../utils/gridfs");
+
 
 const router = express.Router();
 
@@ -24,12 +24,14 @@ router.post("/create", auth, upload.array("blogImages"), async (req, res) => {
       });
     }
 
-    // Upload images to GridFS
-    const imagePaths = [];
+    // Store images as Buffers
+    const imageData = [];
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
-        const uploadedFile = await uploadToGridFS(file);
-        imagePaths.push(uploadedFile.filename);
+        imageData.push({
+          data: file.buffer,
+          contentType: file.mimetype
+        });
       }
     }
     const tagArray = tags ? tags.split(',').map(tag => tag.trim()) : [];
@@ -38,7 +40,7 @@ router.post("/create", auth, upload.array("blogImages"), async (req, res) => {
       author: req.user._id,
       title,
       content,
-      images: imagePaths,
+      images: imageData,
       tags: tagArray,
       category: category || "travel",
       readTime: readTime || 5,
@@ -47,7 +49,7 @@ router.post("/create", auth, upload.array("blogImages"), async (req, res) => {
     await newBlog.save();
     
     // Populate author info
-    await newBlog.populate("author", "firstName lastName profileImagePath");
+    await newBlog.populate("author", "firstName lastName profileImage");
     
     res.status(200).json(newBlog);
   } catch (err) {
@@ -96,7 +98,7 @@ router.get("/", async (req, res) => {
     }
     
     const blogs = await Blog.find(query)
-      .populate("author", "firstName lastName profileImagePath")
+      .populate("author", "firstName lastName profileImage")
       .sort(sortOption);
     
     res.status(200).json(blogs);
@@ -111,8 +113,8 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const blog = await Blog.findById(id)
-      .populate("author", "firstName lastName profileImagePath")
-      .populate("comments.user", "firstName lastName profileImagePath");
+      .populate("author", "firstName lastName profileImage")
+      .populate("comments.user", "firstName lastName profileImage");
     
     if (!blog) {
       return res.status(404).json({ message: "Blog post not found!" });
@@ -130,7 +132,7 @@ router.get("/user/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const blogs = await Blog.find({ author: userId })
-      .populate("author", "firstName lastName profileImagePath")
+      .populate("author", "firstName lastName profileImage")
       .sort({ createdAt: -1 });
     
     res.status(200).json(blogs);
@@ -155,32 +157,23 @@ router.patch("/:id/images", auth, upload.array("blogImages"), async (req, res) =
       return res.status(403).json({ message: "You can only update your own blog posts" });
     }
 
-    // Delete old images if they exist
-    if (blog.images && blog.images.length > 0) {
-      for (const oldImagePath of blog.images) {
-        try {
-          await deleteFile(oldImagePath);
-        } catch (error) {
-          console.log("Error deleting old blog image:", error);
-        }
-      }
-    }
-
-    // Upload new images
-    const newImagePaths = [];
+    // Store new images as Buffers
+    const newImageData = [];
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
-        const uploadedFile = await uploadToGridFS(file);
-        newImagePaths.push(uploadedFile.filename);
+        newImageData.push({
+          data: file.buffer,
+          contentType: file.mimetype
+        });
       }
     }
 
     // Update blog with new images
-    blog.images = newImagePaths;
+    blog.images = newImageData;
     await blog.save();
 
     // Populate author info
-    await blog.populate("author", "firstName lastName profileImagePath");
+    await blog.populate("author", "firstName lastName profileImage");
 
     res.status(200).json({ 
       message: "Blog images updated successfully", 
@@ -213,19 +206,21 @@ router.put("/:id", upload.array("blogImages"), async (req, res) => {
     
     // Handle new images if uploaded
     if (req.files && req.files.length > 0) {
-      const imagePaths = [];
+      const imageData = [];
       for (const file of req.files) {
-        const uploadedFile = await uploadToGridFS(file);
-        imagePaths.push(uploadedFile.filename);
+        imageData.push({
+          data: file.buffer,
+          contentType: file.mimetype
+        });
       }
-      updateData.images = imagePaths;
+      updateData.images = imageData;
     }
     
     const updatedBlog = await Blog.findByIdAndUpdate(
       id,
       updateData,
       { new: true }
-    ).populate("author", "firstName lastName profileImagePath");
+    ).populate("author", "firstName lastName profileImage");
     
     if (!updatedBlog) {
       return res.status(404).json({ message: "Blog post not found!" });
@@ -307,12 +302,37 @@ router.post("/:id/comment", async (req, res) => {
     await blog.save();
     
     // Populate the new comment's user info
-    await blog.populate("comments.user", "firstName lastName profileImagePath");
+    await blog.populate("comments.user", "firstName lastName profileImage");
     
     res.status(200).json(blog);
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: "Fail to add comment!", error: err.message });
+  }
+});
+
+/* GET BLOG IMAGE */
+router.get("/:blogId/images/:imageIndex", async (req, res) => {
+  try {
+    const { blogId, imageIndex } = req.params;
+    const blog = await Blog.findById(blogId);
+    
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    if (!blog.images || !blog.images[imageIndex]) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const image = blog.images[imageIndex];
+    
+    // Set the appropriate content type
+    res.set('Content-Type', image.contentType);
+    res.send(image.data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to get blog image", error: err.message });
   }
 });
 

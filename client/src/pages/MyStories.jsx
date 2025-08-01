@@ -13,7 +13,7 @@ import {
 import "../styles/MyStories.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { apiCall, getImageUrl } from "../utils/api";
+import { apiCall, getBlogImageUrl } from "../utils/api";
 
 const MyStories = () => {
   const [blogs, setBlogs] = useState([]);
@@ -146,10 +146,10 @@ const MyStories = () => {
                 <div key={blog._id} className="story-card">
                   <div className="story-image">
                     {blog.images && blog.images.length > 0 ? (
-                                              <img 
-                          src={getImageUrl(blog.images[0])} 
-                          alt={blog.title}
-                        />
+                      <img 
+                        src={getBlogImageUrl(blog._id, 0)} 
+                        alt={blog.title}
+                      />
                     ) : (
                       <div className="no-image">No Image</div>
                     )}

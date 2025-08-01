@@ -78,6 +78,60 @@ export const categories = [
     icon: <GiIsland />,
     description: "This property is on an island!",
   },
+  {
+    img: "assets/lake_cat.webp",
+    label: "Lakefront",
+    icon: <TbPool />,
+    description: "This property is close to a lake!",
+  },
+  {
+    img: "assets/skiing_cat.jpg",
+    label: "Ski-in/out",
+    icon: <BsSnow />,
+    description: "This property has ski access!",
+  },
+  {
+    img: "assets/castle_cat.webp",
+    label: "Castles",
+    icon: <MdOutlineVilla />,
+    description: "This property is a castle!",
+  },
+  {
+    img: "assets/cave_cat.jpg",
+    label: "Caves",
+    icon: <TbMountain />,
+    description: "This property is in a cave!",
+  },
+  {
+    img: "assets/camping_cat.jpg",
+    label: "Camping",
+    icon: <GiCampfire />,
+    description: "This property is for camping!",
+  },
+  {
+    img: "assets/arctic_cat.webp",
+    label: "Arctic",
+    icon: <BsSnow />,
+    description: "This property is in the arctic!",
+  },
+  {
+    img: "assets/desert_cat.webp",
+    label: "Desert",
+    icon: <GiHeatHaze />,
+    description: "This property is in the desert!",
+  },
+  {
+    img: "assets/barn_cat.jpg",
+    label: "Barns",
+    icon: <FaHouseUser />,
+    description: "This property is a barn!",
+  },
+  {
+    img: "assets/lux_cat.jpg",
+    label: "Luxury",
+    icon: <MdOutlineVilla />,
+    description: "This property is luxurious!",
+  },
 
 
 ];

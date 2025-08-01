@@ -14,7 +14,7 @@ import {
 import "../styles/BlogPage.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { apiCall, getImageUrl } from "../utils/api";
+import { apiCall, getProfileImageUrl, getBlogImageUrl } from "../utils/api";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -237,7 +237,7 @@ const BlogPage = () => {
                 {blog.images && blog.images.length > 0 && (
                   <div className="blog-image">
                     <img 
-                      src={getImageUrl(blog.images[0])} 
+                      src={getBlogImageUrl(blog._id, 0)} 
                       alt={blog.title}
                     />
                     <div className="category-badge">{blog.category}</div>
@@ -248,7 +248,7 @@ const BlogPage = () => {
                   <div className="blog-meta">
                     <div className="author">
                       <img 
-                        src={getImageUrl(blog.author.profileImagePath) || "/assets/phucmai.png"} 
+                        src={blog.author.profileImage ? getProfileImageUrl(blog.author._id) : "/assets/phucmai.png"} 
                         alt={blog.author.firstName}
                       />
                       <span>{blog.author.firstName} {blog.author.lastName}</span>

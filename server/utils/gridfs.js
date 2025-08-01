@@ -26,7 +26,7 @@ const initGridFS = () => {
     });
   } catch (error) {
     console.error("Error initializing GridFS:", error);
-    throw error;
+    console.error("GridFS initialization failed, but continuing...");
   }
 };
 

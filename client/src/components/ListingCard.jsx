@@ -8,12 +8,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setWishList } from "../redux/state";
-import { apiCall, getImageUrl } from "../utils/api";
+import { apiCall, getListingImageUrl } from "../utils/api";
 
 const ListingCard = ({
   listingId,
   creator,
-  listingPhotoPaths,
+  listingPhotos,
   city,
   province,
   country,
@@ -33,12 +33,12 @@ const ListingCard = ({
   const goToPrevSlide = () => {
     setCurrentIndex(
       (prevIndex) =>
-        (prevIndex - 1 + listingPhotoPaths.length) % listingPhotoPaths.length
+        (prevIndex - 1 + listingPhotos.length) % listingPhotos.length
     );
   };
 
   const goToNextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % listingPhotoPaths.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % listingPhotos.length);
   };
 
   const navigate = useNavigate();
@@ -106,7 +106,7 @@ const ListingCard = ({
   };
 
   // Debug: Log image paths
-  console.log("ListingCard - listingPhotoPaths:", listingPhotoPaths);
+  console.log("ListingCard - listingPhotos:", listingPhotos);
 
   return (
     <div
@@ -120,8 +120,9 @@ const ListingCard = ({
           className="slider"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {listingPhotoPaths?.map((photo, index) => {
-            const imageUrl = getImageUrl(photo);
+          {listingPhotos?.map((photo, index) => {
+            // For new Buffer-based images, use the listing image URL
+            const imageUrl = getListingImageUrl(listingId, index);
             return (
               <div key={index} className="listing-slide">
                 <img

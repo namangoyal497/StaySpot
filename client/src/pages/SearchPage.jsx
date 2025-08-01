@@ -49,16 +49,16 @@ const SearchPage = () => {
             booking = false,
           }) => (
             <ListingCard
+              key={_id}
               listingId={_id}
               creator={creator}
-              listingPhotoPaths={listingPhotoPaths}
+              listingPhotos={listingPhotoPaths}
               city={city}
               province={province}
               country={country}
               category={category}
               type={type}
               price={price}
-              booking={booking}
             />
           )
         )}

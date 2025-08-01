@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 
 const User = require("../models/User");
-const { uploadToGridFS } = require("../utils/gridfs");
+
 
 /* Configuration Multer for Memory Storage */
 const upload = multer({ storage: multer.memoryStorage() });
@@ -31,30 +31,14 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
       buffer: profileImage?.buffer ? 'Buffer exists' : 'No buffer'
     });
 
-    /* Upload to GridFS if file exists */
-    let profileImagePath = "";
+    /* Store image as Buffer if file exists */
+    let profileImageData = null;
     if (profileImage) {
-      try {
-        console.log("Attempting to upload profile image:", profileImage.originalname);
-        
-        // Add timeout to GridFS upload
-        const uploadPromise = uploadToGridFS(profileImage);
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('GridFS upload timeout')), 30000)
-        );
-        
-        const uploadedFile = await Promise.race([uploadPromise, timeoutPromise]);
-        profileImagePath = uploadedFile.filename;
-        console.log("Profile image uploaded to GridFS:", profileImagePath);
-      } catch (uploadError) {
-        console.error("Error uploading to GridFS:", uploadError);
-        console.error("Upload error details:", {
-          message: uploadError.message,
-          stack: uploadError.stack
-        });
-        // Continue without profile image if upload fails
-        profileImagePath = "";
-      }
+      console.log("Storing profile image as Buffer:", profileImage.originalname);
+      profileImageData = {
+        data: profileImage.buffer,
+        contentType: profileImage.mimetype
+      };
     } else {
       console.log("No profile image provided in registration");
     }
@@ -75,12 +59,13 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      profileImagePath,
+      profileImage: profileImageData,
     });
 
     /* Save the new User */
     await newUser.save();
     console.log("User registered successfully:", newUser._id);
+    console.log("User profileImage exists:", !!newUser.profileImage);
 
     /* Send a successful message */
     res

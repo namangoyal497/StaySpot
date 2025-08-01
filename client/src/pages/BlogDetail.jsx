@@ -12,7 +12,7 @@ import {
 import "../styles/BlogDetail.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { apiCall, getImageUrl } from "../utils/api";
+import { apiCall, getProfileImageUrl, getBlogImageUrl } from "../utils/api";
 
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
@@ -127,7 +127,7 @@ const BlogDetail = () => {
             <div className="blog-meta">
               <div className="author">
                 <img 
-                  src={getImageUrl(blog.author?.profileImagePath) || "/assets/phucmai.png"} 
+                  src={blog.author?.profileImage ? getProfileImageUrl(blog.author._id) : "/assets/phucmai.png"} 
                   alt={blog.author?.firstName || "Author"}
                 />
                 <div>
@@ -161,7 +161,7 @@ const BlogDetail = () => {
               {blog.images.map((image, index) => (
                 <img 
                   key={index}
-                  src={getImageUrl(image)} 
+                  src={getBlogImageUrl(blog._id, index)} 
                   alt={`${index + 1}`}
                 />
               ))}
@@ -210,7 +210,7 @@ const BlogDetail = () => {
                   <div key={index} className="comment">
                     <div className="comment-author">
                       <img 
-                        src={getImageUrl(comment.user?.profileImagePath) || "/assets/phucmai.png"} 
+                        src={comment.user?.profileImage ? getProfileImageUrl(comment.user._id) : "/assets/phucmai.png"} 
                         alt={comment.user?.firstName || "User"}
                       />
                       <div>

@@ -50,7 +50,7 @@ const PropertyList = () => {
             ({
               _id,
               creator,
-              listingPhotoPaths,
+              listingPhotos,
               city,
               province,
               country,
@@ -63,7 +63,7 @@ const PropertyList = () => {
               <ListingCard
                 listingId={_id}
                 creator={creator}
-                listingPhotoPaths={listingPhotoPaths}
+                listingPhotos={listingPhotos}
                 city={city}
                 province={province}
                 country={country}

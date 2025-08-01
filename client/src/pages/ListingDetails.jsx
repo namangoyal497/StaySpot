@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import "../styles/ListingDetails.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { facilities } from "../data";
-import { apiCall, getImageUrl } from "../utils/api";
+import { apiCall, getProfileImageUrl, getListingImageUrl } from "../utils/api";
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -96,9 +96,9 @@ const ListingDetails = () => {
         </div>
 
         <div className="photos">
-          {listing.listingPhotoPaths?.map((item) => (
+          {listing.listingPhotos?.map((item, index) => (
             <img
-              src={getImageUrl(item)}
+              src={getListingImageUrl(listing._id, index)}
               alt="listing"
             />
           ))}
@@ -115,9 +115,9 @@ const ListingDetails = () => {
         <hr />
 
         <div className="profile">
-          <img
-            src={getImageUrl(listing.creator.profileImagePath) || "/assets/phucmai.png"} alt=""
-          />
+                      <img
+              src={listing.creator.profileImage ? getProfileImageUrl(listing.creator._id) : "/assets/phucmai.png"} alt=""
+            />
           <h3>
             Hosted by {listing.creator.firstName} {listing.creator.lastName}
           </h3>

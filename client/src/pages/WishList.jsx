@@ -24,20 +24,19 @@ const WishList = () => {
               category,
               type,
               price,
-              booking = false,
             }) => (
-            <ListingCard
-              listingId={_id}
-              creator={creator}
-              listingPhotoPaths={listingPhotoPaths}
-              city={city}
-              province={province}
-              country={country}
-              category={category}
-              type={type}
-              price={price}
-              booking={booking}
-            />
+              <ListingCard
+                key={_id}
+                listingId={_id}
+                creator={creator}
+                listingPhotos={listingPhotoPaths}
+                city={city}
+                province={province}
+                country={country}
+                category={category}
+                type={type}
+                price={price}
+              />
           ))
         ) : (
           <div className="empty-state">

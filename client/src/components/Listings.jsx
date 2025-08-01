@@ -20,7 +20,7 @@ const Listings = () => {
       
       // Map frontend category labels to backend category values
       const categoryMapping = {
-        "Beachfront": "beach",
+        "Beachfront": "beachfront",
         "Windmills": "windmill", 
         "Iconic cities": "modern",
         "Countryside": "countryside",
@@ -92,27 +92,25 @@ const Listings = () => {
             ({
               _id,
               creator,
-              listingPhotoPaths,
+              listingPhotos,
               city,
               province,
               country,
               category,
               type,
               price,
-              booking=false
             }) => (
               <ListingCard
                 key={_id}
                 listingId={_id}
                 creator={creator}
-                listingPhotoPaths={listingPhotoPaths}
+                listingPhotos={listingPhotos}
                 city={city}
                 province={province}
                 country={country}
                 category={category}
                 type={type}
                 price={price}
-                booking={booking}
               />
             )
           )}

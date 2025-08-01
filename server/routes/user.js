@@ -2,7 +2,7 @@ const router = require("express").Router()
 const { auth, authorizeUser } = require("../middleware/auth")
 const multer = require("multer");
 const User = require("../models/User");
-const { uploadToGridFS, deleteFile } = require("../utils/gridfs");
+
 
 // Multer configuration for memory storage
 const upload = multer({ storage: multer.memoryStorage() });
@@ -10,8 +10,65 @@ const upload = multer({ storage: multer.memoryStorage() });
 const Booking = require("../models/Booking")
 const Listing = require("../models/Listing")
 
+/* UPDATE USER PROFILE IMAGE */
+router.patch("/:userId/update-profile-image", auth, upload.single("profileImage"), async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    console.log("Profile image update - Requested userId:", userId);
+    console.log("Profile image update - Authenticated user ID:", req.user._id);
+    console.log("Profile image update - User IDs match:", req.user._id.toString() === userId);
+
+    // Manual authorization check
+    if (req.user._id.toString() !== userId) {
+      console.log("Profile image update - Authorization failed");
+      return res.status(403).json({ message: "Access denied. You can only update your own profile." });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Store new profile image as Buffer
+    if (req.file) {
+      console.log("Updating profile image - File received:", req.file.originalname);
+      console.log("Updating profile image - File size:", req.file.size);
+      console.log("Updating profile image - File mimetype:", req.file.mimetype);
+      
+      user.profileImage = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype
+      };
+      console.log("Updating profile image - Buffer size:", user.profileImage.data.length);
+    } else {
+      console.log("Updating profile image - No file received");
+    }
+    await user.save();
+    console.log("Updating profile image - User saved successfully");
+
+    res.status(200).json({ 
+      message: "Profile image updated successfully", 
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        profileImage: user.profileImage,
+        tripList: user.tripList,
+        wishList: user.wishList,
+        propertyList: user.propertyList,
+        reservationList: user.reservationList
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to update profile image", error: err.message });
+  }
+});
+
 /* GET TRIP LIST */
-router.get("/:userId/trips", auth, authorizeUser(), async (req, res) => {
+router.get("/:userId/trips", auth, authorizeUser("userId"), async (req, res) => {
   try {
     const { userId } = req.params
     const trips = await Booking.find({ userId }).populate("userId listingId")
@@ -23,7 +80,7 @@ router.get("/:userId/trips", auth, authorizeUser(), async (req, res) => {
 })
 
 /* ADD LISTING TO WISHLIST */
-router.patch("/:userId/:listingId", auth, authorizeUser(), async (req, res) => {
+router.patch("/:userId/:listingId", auth, authorizeUser("userId"), async (req, res) => {
   try {
     const { userId, listingId } = req.params
     const user = await User.findById(userId)
@@ -47,7 +104,7 @@ router.patch("/:userId/:listingId", auth, authorizeUser(), async (req, res) => {
 })
 
 /* GET USER LISTINGS */
-router.get("/:userId/properties", auth, authorizeUser(), async (req, res) => {
+router.get("/:userId/properties", auth, authorizeUser("userId"), async (req, res) => {
   try {
     const { userId } = req.params
     const properties = await Listing.find({ creator: userId }).populate("creator")
@@ -59,7 +116,7 @@ router.get("/:userId/properties", auth, authorizeUser(), async (req, res) => {
 })
 
 /* GET USER WISHLIST */
-router.get("/:userId/wishlist", auth, authorizeUser(), async (req, res) => {
+router.get("/:userId/wishlist", auth, authorizeUser("userId"), async (req, res) => {
   try {
     const { userId } = req.params
     const user = await User.findById(userId).populate({
@@ -76,7 +133,7 @@ router.get("/:userId/wishlist", auth, authorizeUser(), async (req, res) => {
 })
 
 /* GET RESERVATION LIST */
-router.get("/:userId/reservations", auth, authorizeUser(), async (req, res) => {
+router.get("/:userId/reservations", auth, authorizeUser("userId"), async (req, res) => {
   try {
     const { userId } = req.params
     // Get all listings created by this user, then get bookings for those listings
@@ -90,53 +147,27 @@ router.get("/:userId/reservations", auth, authorizeUser(), async (req, res) => {
   }
 })
 
-/* UPDATE USER PROFILE IMAGE */
-router.patch("/:userId/profile-image", auth, authorizeUser(), upload.single("profileImage"), async (req, res) => {
+/* GET USER PROFILE IMAGE */
+router.get("/:userId/profile-image", async (req, res) => {
   try {
     const { userId } = req.params;
-    
-
-
     const user = await User.findById(userId);
+    
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Delete old profile image if exists
-    if (user.profileImagePath) {
-      try {
-        await deleteFile(user.profileImagePath);
-      } catch (error) {
-        console.log("Error deleting old profile image:", error);
-      }
+    if (!user.profileImage || !user.profileImage.data) {
+      return res.status(404).json({ message: "Profile image not found" });
     }
 
-    // Upload new profile image
-    let newProfileImagePath = "";
-    if (req.file) {
-      const uploadedFile = await uploadToGridFS(req.file);
-      newProfileImagePath = uploadedFile.filename;
-    }
-
-    // Update user profile image
-    user.profileImagePath = newProfileImagePath;
-    await user.save();
-
-    res.status(200).json({ 
-      message: "Profile image updated successfully", 
-      user: {
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        profileImagePath: user.profileImagePath
-      }
-    });
+    // Set the appropriate content type
+    res.set('Content-Type', user.profileImage.contentType);
+    res.send(user.profileImage.data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Failed to update profile image", error: err.message });
+    res.status(500).json({ message: "Failed to get profile image", error: err.message });
   }
 });
-
 
 module.exports = router
