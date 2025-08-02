@@ -10,7 +10,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: REACT_APP_API_URL
-        value: https://stayspot-app.onrender.com
+        value: https://stayspot-tnd0.onrender.com
       - key: PORT
         value: 10000
       - key: MONGO_URL
