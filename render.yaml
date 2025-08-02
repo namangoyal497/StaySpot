@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: stayspot-app-fresh
+    name: stayspot-app
     env: node
     plan: free
-    # FORCE SERVER ONLY BUILD - NO CLIENT BUILD
+    # SERVER ONLY BUILD - NO CLIENT BUILD NEEDED
     buildCommand: echo "SERVER ONLY BUILD - NO CLIENT BUILD NEEDED"; cd server; npm install
     startCommand: cd server && npm start
     envVars:
