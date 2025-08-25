@@ -39,25 +39,8 @@ Here are some screenshots showcasing the StaySpot platform:
 ### ✍️ Write Your Own Travel Story
 ![Write Travel Story](screenshots/write-travel-story.png)
 
-### � My Personal Story Collection
-![My Story Collection](screenshots/my-story-collection.png)
-![Featured Story 2](screenshots/story2.png)
-
-### 📖 Featured Story 3
-![Featured Story 3](screenshots/story3.png)
-### 🎨 Modern UI/UX
-### ✍️ Write Your Own Travel Story
-![Write Travel Story](screenshots/write-travel-story.png)
-- **Responsive Design**: Works perfectly on all devices
 ### 👤 My Personal Story Collection
 ![My Story Collection](screenshots/my-story-collection.png)
-- **Category Navigation**: Visual category browsing with images
-- **Filter System**: Icon-based filtering with smooth animations
-- **Modern Styling**: SCSS with custom variables and animations
-- **Nunito Font**: Consistent typography throughout
-
-### 📝 Blog Platform
-- **Create Blogs**: Users can write and publish travel blogs
 - **Rich Content**: Support for images and formatted text
 - **Category System**: Blogs organized by travel categories
 - **User Stories**: Personal blog management
