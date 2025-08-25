@@ -1,83 +1,46 @@
 # 🏠 StaySpot - Vacation Rental Platform
+## 📸 Website Screenshots
 
 Here are some screenshots showcasing the StaySpot platform:
 
-### 🏠 Modern Homepage
-![Homepage](screenshots/Screenshot%202025-08-25%20121419.png)
-
-### 🏷️ Property Listings & Categories
-![Property Listings & Categories](screenshots/Screenshot%202025-08-25%20121441.png)
-
-### � Listing Details Overview
-![Listing Details Overview](screenshots/Screenshot%202025-08-25%20121505.png)
-
-### � Listing Details - Gallery & Info
-![Listing Details - Gallery & Info](screenshots/Screenshot%202025-08-25%20121520.png)
-
-### ➕ Create a New Listing - Step 1
-![Create Listing Step 1](screenshots/Screenshot%202025-08-25%20121535.png)
-
-### ➕ Create a New Listing - Step 2
-![Create Listing Step 2](screenshots/Screenshot%202025-08-25%20121542.png)
-
-### � Explore Travel Blogs
-![Travel Blog](screenshots/Screenshot%202025-08-25%20121550.png)
-
-### � Browse Travel Blog Stories
-
-### 📖 Featured Story 1
-
-### 📖 Featured Story 2
-
-### � Featured Story 3
-
-### ✍️ Write Your Own Travel Story
-
-### � My Personal Story Collection
-### ✍️ Write Travel Story
-![Write Travel Story](screenshots/Screenshot%202025-08-25%20121713.png)
-### 👤 My Story
-![My Story](screenshots/Screenshot%202025-08-25%20121834.png)
-![StaySpot](https://img.shields.io/badge/StaySpot-Vacation%20Rental-blue)
-![React](https://img.shields.io/badge/React-18.0.0-blue)
-![MongoDB](https://img.shields.io/badge/MongoDB-5.0.0-green)
-
-
-### 🏠 Property Management
-- **Category System**: Properties categorized by type (Beachfront, Castles, Luxury, etc.)
-- **Advanced Filtering**: Filter properties by category, location, and amenities
-- **Location Services**: Detailed address and location information
-
-Here are some screenshots showcasing the StaySpot platform:
-- **Secure Registration**: User registration with email validation
 ### 🏠 Modern Homepage
 ![Homepage](screenshots/homepage.png)
-- **JWT Authentication**: Secure login with JWT tokens
+
 ### 🏷️ Property Listings & Categories
 ![Property Listings & Categories](screenshots/listings-categories.png)
-- **Profile Management**: User profiles with avatar uploads
+
 ### 📄 Listing Details Overview
 ![Listing Details Overview](screenshots/listing-details-overview.png)
-- **Password Security**: Bcrypt hashed passwords
+
 ### 📄 Listing Details - Gallery & Info
 ![Listing Details - Gallery & Info](screenshots/listing-details-gallery.png)
 
 ### ➕ Create a New Listing - Step 1
 ![Create Listing Step 1](screenshots/create-listing-step1.png)
-### 📅 Booking System
+
 ### ➕ Create a New Listing - Step 2
 ![Create Listing Step 2](screenshots/create-listing-step2.png)
-- **Date Selection**: Interactive calendar for booking dates
+
 ### 📝 Explore Travel Blogs
 ![Travel Blog](screenshots/travel-blog.png)
-- **Guest Management**: Specify number of guests
+
 ### 📚 Browse Travel Blog Stories
 ![Travel Blog Stories](screenshots/blog-stories.png)
-- **Price Calculation**: Automatic price calculation based on dates
+
 ### 📖 Featured Story 1
 ![Featured Story 1](screenshots/story1.png)
-- **Booking History**: Track all bookings and reservations
-### 📖 Featured Story 2
+
+### � Featured Story 2
+![Featured Story 2](screenshots/story2.png)
+
+### 📖 Featured Story 3
+![Featured Story 3](screenshots/story3.png)
+
+### ✍️ Write Your Own Travel Story
+![Write Travel Story](screenshots/write-travel-story.png)
+
+### � My Personal Story Collection
+![My Story Collection](screenshots/my-story-collection.png)
 ![Featured Story 2](screenshots/story2.png)
 
 ### 📖 Featured Story 3
