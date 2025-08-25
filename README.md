@@ -1,37 +1,93 @@
 # 🏠 StaySpot - Vacation Rental Platform
 
-A modern, full-stack vacation rental platform built with React, Node.js, and MongoDB. Features include user authentication, property listings, booking system, and a blog platform.
+Here are some screenshots showcasing the StaySpot platform:
 
-**🌐 Live Demo:** [https://stayspot-tnd0.onrender.com](https://stayspot-tnd0.onrender.com)
+### 🏠 Modern Homepage
+![Homepage](screenshots/Screenshot%202025-08-25%20121419.png)
 
+### 🏷️ Property Listings & Categories
+![Property Listings & Categories](screenshots/Screenshot%202025-08-25%20121441.png)
+
+### � Listing Details Overview
+![Listing Details Overview](screenshots/Screenshot%202025-08-25%20121505.png)
+
+### � Listing Details - Gallery & Info
+![Listing Details - Gallery & Info](screenshots/Screenshot%202025-08-25%20121520.png)
+
+### ➕ Create a New Listing - Step 1
+![Create Listing Step 1](screenshots/Screenshot%202025-08-25%20121535.png)
+
+### ➕ Create a New Listing - Step 2
+![Create Listing Step 2](screenshots/Screenshot%202025-08-25%20121542.png)
+
+### � Explore Travel Blogs
+![Travel Blog](screenshots/Screenshot%202025-08-25%20121550.png)
+
+### � Browse Travel Blog Stories
+
+### 📖 Featured Story 1
+
+### 📖 Featured Story 2
+
+### � Featured Story 3
+
+### ✍️ Write Your Own Travel Story
+
+### � My Personal Story Collection
+### ✍️ Write Travel Story
+![Write Travel Story](screenshots/Screenshot%202025-08-25%20121713.png)
+### 👤 My Story
+![My Story](screenshots/Screenshot%202025-08-25%20121834.png)
 ![StaySpot](https://img.shields.io/badge/StaySpot-Vacation%20Rental-blue)
 ![React](https://img.shields.io/badge/React-18.0.0-blue)
-![Node.js](https://img.shields.io/badge/Node.js-16.0.0-green)
 ![MongoDB](https://img.shields.io/badge/MongoDB-5.0.0-green)
 
-## ✨ Features
 
 ### 🏠 Property Management
-- **Create & List Properties**: Users can create detailed property listings with multiple images
 - **Category System**: Properties categorized by type (Beachfront, Castles, Luxury, etc.)
 - **Advanced Filtering**: Filter properties by category, location, and amenities
-- **Image Gallery**: Multi-image support with slider functionality
 - **Location Services**: Detailed address and location information
 
-### 👤 User Authentication
+Here are some screenshots showcasing the StaySpot platform:
 - **Secure Registration**: User registration with email validation
+### 🏠 Modern Homepage
+![Homepage](screenshots/homepage.png)
 - **JWT Authentication**: Secure login with JWT tokens
+### 🏷️ Property Listings & Categories
+![Property Listings & Categories](screenshots/listings-categories.png)
 - **Profile Management**: User profiles with avatar uploads
+### 📄 Listing Details Overview
+![Listing Details Overview](screenshots/listing-details-overview.png)
 - **Password Security**: Bcrypt hashed passwords
+### 📄 Listing Details - Gallery & Info
+![Listing Details - Gallery & Info](screenshots/listing-details-gallery.png)
 
+### ➕ Create a New Listing - Step 1
+![Create Listing Step 1](screenshots/create-listing-step1.png)
 ### 📅 Booking System
+### ➕ Create a New Listing - Step 2
+![Create Listing Step 2](screenshots/create-listing-step2.png)
 - **Date Selection**: Interactive calendar for booking dates
+### 📝 Explore Travel Blogs
+![Travel Blog](screenshots/travel-blog.png)
 - **Guest Management**: Specify number of guests
+### 📚 Browse Travel Blog Stories
+![Travel Blog Stories](screenshots/blog-stories.png)
 - **Price Calculation**: Automatic price calculation based on dates
+### 📖 Featured Story 1
+![Featured Story 1](screenshots/story1.png)
 - **Booking History**: Track all bookings and reservations
+### 📖 Featured Story 2
+![Featured Story 2](screenshots/story2.png)
 
+### 📖 Featured Story 3
+![Featured Story 3](screenshots/story3.png)
 ### 🎨 Modern UI/UX
+### ✍️ Write Your Own Travel Story
+![Write Travel Story](screenshots/write-travel-story.png)
 - **Responsive Design**: Works perfectly on all devices
+### 👤 My Personal Story Collection
+![My Story Collection](screenshots/my-story-collection.png)
 - **Category Navigation**: Visual category browsing with images
 - **Filter System**: Icon-based filtering with smooth animations
 - **Modern Styling**: SCSS with custom variables and animations
