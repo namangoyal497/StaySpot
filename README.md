@@ -9,32 +9,32 @@ Here are some screenshots showcasing the StaySpot platform:
 ### 🏷️ Property Listings & Categories
 ![Property Listings & Categories](screenshots/listings-categories.png)
 
-### 📄 Listing Details Overview
-![Listing Details Overview](screenshots/listing-details-overview.png)
+### 🌍 Travel Stories and Experiences
+![Travel Stories and Experiences](screenshots/travel-stories-experiences.png)
 
-### 📄 Listing Details - Gallery & Info
-![Listing Details - Gallery & Info](screenshots/listing-details-gallery.png)
+### 📖 Actual Travel Stories
+![Actual Travel Stories](screenshots/actual-travel-stories.png)
 
-### ➕ Create a New Listing - Step 1
-![Create Listing Step 1](screenshots/create-listing-step1.png)
+### 📝 Story Description
+![Story Description](screenshots/story-description.png)
 
-### ➕ Create a New Listing - Step 2
-![Create Listing Step 2](screenshots/create-listing-step2.png)
+
+### 📝 Story Description (cont.)
+![Story Description (cont.)](screenshots/story-description-cont.png)
 
 ### 📝 Explore Travel Blogs
 ![Travel Blog](screenshots/travel-blog.png)
 
-### 📚 Browse Travel Blog Stories
-![Travel Blog Stories](screenshots/blog-stories.png)
+### 🏷️ Listing Description
+![Listing Description](screenshots/listing-description.png)
 
-### 📖 Featured Story 1
-![Featured Story 1](screenshots/story1.png)
+### 📦 Booking Listing 1
+![Booking Listing 1](screenshots/booking-listing-1.png)
 
-### � Featured Story 2
-![Featured Story 2](screenshots/story2.png)
-
-### 📖 Featured Story 3
-![Featured Story 3](screenshots/story3.png)
+### 📦 Booking Listing 2
+![Booking Listing 2](screenshots/booking-listing-2.png)
+### 📦 Booking Listing 3
+![Booking Listing 3](screenshots/booking-listing-3.png)
 
 ### ✍️ Write Your Own Travel Story
 ![Write Travel Story](screenshots/write-travel-story.png)
